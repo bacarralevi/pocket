@@ -1,11 +1,15 @@
 <!-- accounts/templates/accounts/register.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <link rel="stylesheet" href="{% static 'accounts/css/register.css' %}">
 </head>
+
 <body>
     <h2>Register</h2>
     <form method="POST">
@@ -15,4 +19,5 @@
     </form>
     <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
 </body>
+
 </html>
