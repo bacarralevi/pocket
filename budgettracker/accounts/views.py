@@ -40,3 +40,11 @@ def logout_view(request):
 @login_required
 def dashboard(request):
     return render(request, 'accounts/dashboard.html')
+
+
+
+# Transactions View
+@login_required
+def transactions(request):
+    # Later you will query user's transactions here
+    return render(request, 'accounts/transactions.html')
