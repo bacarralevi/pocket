@@ -9,6 +9,11 @@
 </head>
 <body>
     <h2>My Transactions</h2>
+
+    <a href="{% url 'create_transaction' %}">
+        <button>Add Transaction</button>
+    </a>
+
     <p>Here you will see your income and expense entries.</p>
     <a href="{% url 'dashboard' %}">Back to Dashboard</a>
 </body>

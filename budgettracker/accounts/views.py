@@ -42,9 +42,15 @@ def dashboard(request):
     return render(request, 'accounts/dashboard.html')
 
 
-
 # Transactions View
 @login_required
 def transactions(request):
     # Later you will query user's transactions here
     return render(request, 'accounts/transactions.html')
+
+
+# Create Transaction View
+@login_required
+def create_transaction(request):
+    # Later you will have a form here
+    return render(request, 'accounts/create_transaction.html')
