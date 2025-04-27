@@ -33,6 +33,15 @@
             <option value="Expense">Expense</option>
         </select><br><br>
 
+            <!-- Category -->
+        <label for="category">Category:</label><br>
+        <select id="category" name="category">
+            <option value="">-- Select a Category --</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
         <!-- Notes -->
         <label for="notes">Notes (optional):</label><br>
         <input type="text" id="notes" name="notes"><br><br>

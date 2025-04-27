@@ -1,4 +1,4 @@
-from .models import Transaction
+from .models import Transaction, Category
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
@@ -52,12 +52,17 @@ def transactions(request):
 # Create Transaction View
 @login_required
 def create_transaction(request):
+    categories = Category.objects.all()
+    
     if request.method == 'POST':
         title = request.POST.get('title')
         amount = request.POST.get('amount')
         date = request.POST.get('date')
         type = request.POST.get('type')
         notes = request.POST.get('notes')
+        category_id = request.POST.get('category')
+
+        category = Category.objects.get(id=category_id) if category_id else None
 
         Transaction.objects.create(
             user=request.user,
@@ -65,12 +70,13 @@ def create_transaction(request):
             amount=amount,
             date=date,
             type=type,
-            notes=notes
+            notes=notes,
+            category=category
         )
 
         return redirect('transactions')  # After saving, redirect to "My Transactions"
 
-    return render(request, 'accounts/create_transaction.html')
+    return render(request, 'accounts/create_transaction.html', {'categories': categories})
 
 
 # Edit Transaction View
@@ -89,3 +95,15 @@ def edit_transaction(request, transaction_id):
         return redirect('transactions')
 
     return render(request, 'accounts/edit_transaction.html', {'transaction': transaction})
+
+
+# Delete Transaction View
+@login_required
+def delete_transaction(request, transaction_id):
+    transaction = Transaction.objects.get(id=transaction_id, user=request.user)
+    
+    if request.method == 'POST':
+        transaction.delete()
+        return redirect('transactions')
+
+    return render(request, 'accounts/delete_transaction.html', {'transaction': transaction})
