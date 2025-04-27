@@ -1,5 +1,4 @@
-# accounts/views.py
-
+from .models import Transaction
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
@@ -45,12 +44,30 @@ def dashboard(request):
 # Transactions View
 @login_required
 def transactions(request):
-    # Later you will query user's transactions here
-    return render(request, 'accounts/transactions.html')
+    user_transactions = Transaction.objects.filter(user=request.user).order_by('-date')
+
+    return render(request, 'accounts/transactions.html', {'transactions': user_transactions})
 
 
 # Create Transaction View
 @login_required
 def create_transaction(request):
-    # Later you will have a form here
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        amount = request.POST.get('amount')
+        date = request.POST.get('date')
+        type = request.POST.get('type')
+        notes = request.POST.get('notes')
+
+        Transaction.objects.create(
+            user=request.user,
+            title=title,
+            amount=amount,
+            date=date,
+            type=type,
+            notes=notes
+        )
+
+        return redirect('transactions')  # After saving, redirect to "My Transactions"
+
     return render(request, 'accounts/create_transaction.html')

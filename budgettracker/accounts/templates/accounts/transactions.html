@@ -14,7 +14,35 @@
         <button>Add Transaction</button>
     </a>
 
-    <p>Here you will see your income and expense entries.</p>
-    <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+    <br><br>
+
+    {% if transactions %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.title }}</td>
+                    <td>{{ transaction.amount }}</td>
+                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.type }}</td>
+                    <td>{{ transaction.notes }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No transactions yet.</p>
+    {% endif %}
+
+    <p><a href="{% url 'dashboard' %}">Back to Dashboard</a></p>
 </body>
 </html>
