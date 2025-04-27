@@ -6,3 +6,4 @@ budgettracker/accounts/__pycache__/
 budgettracker/accounts/migrations/
 db.sqlite3
 budgettracker/db.sqlite3
+myenv/
