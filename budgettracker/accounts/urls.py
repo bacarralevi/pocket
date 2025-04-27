@@ -10,4 +10,5 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('transactions/', views.transactions, name='transactions'),
     path('transactions/create/', views.create_transaction, name='create_transaction'),
+    path('transactions/edit/<int:transaction_id>/', views.edit_transaction, name='edit_transaction'),
 ]

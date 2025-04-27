@@ -71,3 +71,21 @@ def create_transaction(request):
         return redirect('transactions')  # After saving, redirect to "My Transactions"
 
     return render(request, 'accounts/create_transaction.html')
+
+
+# Edit Transaction View
+@login_required
+def edit_transaction(request, transaction_id):
+    transaction = Transaction.objects.get(id=transaction_id, user=request.user)
+
+    if request.method == 'POST':
+        transaction.title = request.POST.get('title')
+        transaction.amount = request.POST.get('amount')
+        transaction.date = request.POST.get('date')
+        transaction.type = request.POST.get('type')
+        transaction.notes = request.POST.get('notes')
+        transaction.save()
+
+        return redirect('transactions')
+
+    return render(request, 'accounts/edit_transaction.html', {'transaction': transaction})
