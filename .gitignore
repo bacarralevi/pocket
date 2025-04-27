@@ -1,0 +1,6 @@
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
+budgettracker/accounts/__pycache__/
+# Ignore migrations folder
+budgettracker/accounts/migrations/
