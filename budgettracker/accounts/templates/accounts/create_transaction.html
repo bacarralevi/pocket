@@ -9,7 +9,37 @@
 </head>
 <body>
     <h2>Add a New Transaction</h2>
-    <p>This will be the form to create a transaction!</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        <!-- Title -->
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <!-- Amount -->
+        <label for="amount">Amount:</label><br>
+        <input type="number" id="amount" name="amount" step="0.01" required><br><br>
+
+        <!-- Date -->
+        <label for="date">Date:</label><br>
+        <input type="date" id="date" name="date" required><br><br>
+
+        <!-- Type (Income or Expense) -->
+        <label for="type">Type:</label><br>
+        <select id="type" name="type" required>
+            <option value="">--Select Type--</option>
+            <option value="Income">Income</option>
+            <option value="Expense">Expense</option>
+        </select><br><br>
+
+        <!-- Notes -->
+        <label for="notes">Notes (optional):</label><br>
+        <input type="text" id="notes" name="notes"><br><br>
+
+        <!-- Submit -->
+        <button type="submit">Save Transaction</button>
+    </form>
 
     <p><a href="{% url 'transactions' %}">Back to Transactions</a></p>
 </body>
