@@ -3,6 +3,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
+from datetime import datetime
+
 
 # Registration View
 def register(request):
@@ -35,10 +38,39 @@ def logout_view(request):
     # After logout, redirect to login page
     return redirect('login')
 
+
 # Dashboard View
 @login_required
 def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+    # Get the current month and year
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+
+    # Calculate total income for the current month
+    total_income = Transaction.objects.filter(
+        user=request.user,
+        type='Income',
+        date__month=current_month,
+        date__year=current_year
+    ).aggregate(Sum('amount'))['amount__sum'] or 0  # Use 0 if no income
+
+    # Calculate total expenses for the current month
+    total_expenses = Transaction.objects.filter(
+        user=request.user,
+        type='Expense',
+        date__month=current_month,
+        date__year=current_year
+    ).aggregate(Sum('amount'))['amount__sum'] or 0  # Use 0 if no expenses
+
+    # Calculate the remaining balance
+    remaining_balance = total_income - total_expenses
+
+    # Pass the totals and remaining balance to the template
+    return render(request, 'accounts/dashboard.html', {
+        'total_income': total_income,
+        'total_expenses': total_expenses,
+        'remaining_balance': remaining_balance,
+    })
 
 
 # Transactions View
