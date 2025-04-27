@@ -2,11 +2,15 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Transactions</title>
+    <link rel="stylesheet" href="{% static 'accounts/css/transactions.css' %}">
 </head>
+
 <body>
     <h2>My Transactions</h2>
 
@@ -17,39 +21,48 @@
     <br><br>
 
     {% if transactions %}
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Category</th>
-                    <th>Notes</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for transaction in transactions %}
-                <tr>
-                    <td>{{ transaction.title }}</td>
-                    <td>{{ transaction.amount }}</td>
-                    <td>{{ transaction.date }}</td>
-                    <td>{{ transaction.type }}</td>
-                    <td>{{ transaction.category.name }}</td>
-                    <td>{{ transaction.notes }}</td>
-                    <td>
-                        <a href="{% url 'edit_transaction' transaction.id %}">Edit</a> |
-                        <a href="{% url 'delete_transaction' transaction.id %}">Delete</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Category</th>
+                <th>Notes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.title }}</td>
+                <td>{{ transaction.amount }}</td>
+                <td>{{ transaction.date }}</td>
+                <td>{{ transaction.type }}</td>
+                <td>{{ transaction.category.name }}</td>
+                <td>{{ transaction.notes }}</td>
+                <td>
+                    <a href="{% url 'edit_transaction' transaction.id %}">Edit</a> |
+                    <a href="{% url 'delete_transaction' transaction.id %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {% else %}
-        <p>No transactions yet.</p>
+    <p>No transactions yet.</p>
     {% endif %}
 
     <p><a href="{% url 'dashboard' %}">Back to Dashboard</a></p>
 </body>
+
 </html>
+=======
+
+</html>
+>>>>>>> e087fc7aff8a0f86aa5ebc29606ae16168aef8cc
+=======
+
+</html>
+>>>>>>> e087fc7aff8a0f86aa5ebc29606ae16168aef8cc

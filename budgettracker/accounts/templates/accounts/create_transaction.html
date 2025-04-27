@@ -2,11 +2,15 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Transaction</title>
+    <link rel="stylesheet" href="{% static 'accounts/css/create_transaction.css' %}">
 </head>
+
 <body>
     <h2>Add a New Transaction</h2>
 
@@ -33,12 +37,28 @@
             <option value="Expense">Expense</option>
         </select><br><br>
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+        <!-- Category -->
+=======
             <!-- Category -->
+>>>>>>> e087fc7aff8a0f86aa5ebc29606ae16168aef8cc
+=======
+            <!-- Category -->
+>>>>>>> e087fc7aff8a0f86aa5ebc29606ae16168aef8cc
         <label for="category">Category:</label><br>
         <select id="category" name="category">
             <option value="">-- Select a Category --</option>
             {% for category in categories %}
+<<<<<<< HEAD
+<<<<<<< HEAD
+            <option value="{{ category.id }}">{{ category.name }}</option>
+=======
                 <option value="{{ category.id }}">{{ category.name }}</option>
+>>>>>>> e087fc7aff8a0f86aa5ebc29606ae16168aef8cc
+=======
+                <option value="{{ category.id }}">{{ category.name }}</option>
+>>>>>>> e087fc7aff8a0f86aa5ebc29606ae16168aef8cc
             {% endfor %}
         </select><br><br>
 
@@ -52,4 +72,13 @@
 
     <p><a href="{% url 'transactions' %}">Back to Transactions</a></p>
 </body>
+<<<<<<< HEAD
+<<<<<<< HEAD
+
 </html>
+=======
+</html>
+>>>>>>> e087fc7aff8a0f86aa5ebc29606ae16168aef8cc
+=======
+</html>
+>>>>>>> e087fc7aff8a0f86aa5ebc29606ae16168aef8cc
