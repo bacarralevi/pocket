@@ -14,8 +14,10 @@
 
     <h4>Remaining Balance: ${{ remaining_balance }}</h4>
 
-    <p><a href="{% url 'transactions' %}">View My Transactions</a></p>
-
+    <div>
+        <a href="{% url 'create_transaction' %}">Add New Transaction</a> | 
+        <a href="{% url 'transactions' %}">View My Transactions</a>
+    </div>
 
     <p><a href="{% url 'logout' %}">Logout</a></p>
 </body>
