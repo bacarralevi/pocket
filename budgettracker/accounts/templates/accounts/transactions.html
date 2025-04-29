@@ -135,9 +135,18 @@
                     </div>
 
                     <div class="transactions-actions">
-                        <a href="{% url 'dashboard' %}" class="back-link">
-                            <i class="fas fa-arrow-left"></i> Back to Dashboard
-                        </a>
+                        <div class="actions-left">
+                            <a href="{% url 'dashboard' %}" class="back-link">
+                                <i class="fas fa-arrow-left"></i> Back to Dashboard
+                            </a>
+                            
+                            {% if transactions %}
+                            <a href="javascript:void(0);" onclick="exportTransactions()" class="export-button">
+                                <i class="fas fa-file-export"></i> Export CSV
+                            </a>
+                            {% endif %}
+                        </div>
+                        
                         <a href="{% url 'create_transaction' %}" class="add-button">
                             <i class="fas fa-plus"></i> Add Transaction
                         </a>
@@ -151,6 +160,35 @@
             <p>&copy; 2025 Pocket. All rights reserved.</p>
         </footer>
     </div>
+
+    <script>
+        function exportTransactions() {
+            // Get current filter values
+            const searchTerm = document.getElementById('search_term').value;
+            const typeFilter = document.getElementById('type_filter').value;
+            const categoryFilter = document.getElementById('category_filter').value;
+            const startDate = document.getElementById('start_date').value;
+            const endDate = document.getElementById('end_date').value;
+            
+            // Build the export URL with current filters
+            let exportUrl = "{% url 'export_transactions_csv' %}?";
+            
+            if (startDate) {
+                exportUrl += `start_date=${startDate}&`;
+            }
+            
+            if (endDate) {
+                exportUrl += `end_date=${endDate}&`;
+            }
+            
+            if (categoryFilter) {
+                exportUrl += `category_id=${categoryFilter}&`;
+            }
+            
+            // Redirect to the export URL
+            window.location.href = exportUrl;
+        }
+    </script>
 </body>
 
 </html>

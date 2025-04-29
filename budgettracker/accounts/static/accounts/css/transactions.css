@@ -317,6 +317,32 @@ body {
     color: #4a5568;
 }
 
+.actions-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Export Button Style */
+.export-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #4299e1;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.export-button:hover {
+    background-color: #3182ce;
+}
+
 .add-button {
     display: flex;
     align-items: center;
@@ -395,6 +421,18 @@ body {
         flex-direction: column;
         gap: 5px;
     }
+
+    .actions-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        width: 100%;
+    }
+    
+    .back-link,
+    .export-button {
+        width: 100%;
+    }
 }
 
 @media (max-width: 480px) {
@@ -406,8 +444,14 @@ body {
         flex-direction: column;
         gap: 15px;
     }
-
-    .add-button {
+    
+    .actions-left {
+        width: 100%;
+    }
+    
+    .add-button,
+    .back-link,
+    .export-button {
         width: 100%;
         justify-content: center;
     }
