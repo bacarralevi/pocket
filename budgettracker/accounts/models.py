@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -28,5 +29,12 @@ class Transaction(models.Model):
         return f"{self.title} - {self.type} - {self.amount}"
     
 
+class Budget(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    month = models.DateField(default=timezone.now)  # use the first day of the month
 
+    def __str__(self):
+        return f"{self.user.username} - {self.category.name if self.category else 'Total'}"
 

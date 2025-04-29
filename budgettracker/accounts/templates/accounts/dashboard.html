@@ -5,6 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <style>
+        .warning {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .positive {
+            color: green;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <h2>Welcome to your dashboard, {{ user.username }}!</h2>
@@ -13,6 +25,13 @@
 
 
     <h4>Remaining Balance: ${{ remaining_balance }}</h4>
+
+        <!-- 🚨 Budget Warning Message -->
+    {% if remaining_balance < 0 %}
+        <p class="warning">⚠️ Warning: You have exceeded your monthly budget!</p>
+    {% else %}
+        <p class="positive">✅ You are within your budget.</p>
+    {% endif %}
 
     <div>
         <a href="{% url 'create_transaction' %}">Add New Transaction</a> | 
