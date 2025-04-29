@@ -28,24 +28,6 @@
                 <input type="number" id="amount" name="amount" step="0.01" required>
             </div>
 
-<<<<<<< HEAD
-        <!-- Type (Income or Expense) -->
-        <label for="type">Type:</label><br>
-        <select id="type" name="type" required onchange="toggleCategory()">
-            <option value="">--Select Type--</option>
-            <option value="Income">Income</option>
-            <option value="Expense">Expense</option>
-        </select><br><br>
-
-        <!-- Category -->
-        <label for="category">Category:</label><br>
-        <select id="category" name="category">
-            <option value="">-- Select a Category --</option>
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-        </select><br><br>
-=======
             <div class="form-group">
                 <label for="date">Date</label>
                 <input type="date" id="date" name="date" required>
@@ -59,7 +41,6 @@
                     <option value="Expense">Expense</option>
                 </select>
             </div>
->>>>>>> 2cfbe49db9495d381bbf7477c93c166ddeb0eda3
 
             <div class="form-group">
                 <label for="category">Category</label>

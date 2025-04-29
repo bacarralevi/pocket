@@ -85,35 +85,6 @@ def transactions(request):
     transactions = Transaction.objects.filter(user=user).order_by('-date')
     categories = Category.objects.all()
 
-<<<<<<< HEAD
-    start_date = request.GET.get('start_date')
-    end_date = request.GET.get('end_date')
-    category_id = request.GET.get('category_id')
-
-    if start_date:
-        transactions = transactions.filter(date__gte=parse_date(start_date))
-    if end_date:
-        transactions = transactions.filter(date__lte=parse_date(end_date))
-    if category_id:
-        transactions = transactions.filter(category_id=category_id)
-
-    # Monthly totals
-    today = datetime.today()
-    this_month = today.month
-    this_year = today.year
-
-    monthly_transactions = transactions.filter(date__month=this_month, date__year=this_year)
-    total_income = sum(t.amount for t in monthly_transactions if t.type == 'Income')
-    total_expenses = sum(t.amount for t in monthly_transactions if t.type == 'Expense')
-    remaining_balance = total_income - total_expenses
-
-    return render(request, 'accounts/transactions.html', {
-        'transactions': transactions,
-        'total_income': total_income,
-        'total_expenses': total_expenses,
-        'remaining_balance': remaining_balance,
-        'all_categories': categories,
-=======
     # Get the current month and year
     current_month = datetime.now().month
     current_year = datetime.now().year
@@ -143,7 +114,6 @@ def transactions(request):
         'total_expenses': total_expenses,
         'remaining_balance': remaining_balance,
     
->>>>>>> a5e871db50adf9dd1defef4d9ec7dc02ad960a13
     })
 
 
