@@ -42,6 +42,51 @@
                         <h2>Transaction History</h2>
                     </div>
 
+                    <!-- Search Form -->
+                    <div class="search-section">
+                        <form method="GET" action="{% url 'transactions' %}" class="search-form">
+                            <div class="search-inputs">
+                                <div class="search-field">
+                                    <label for="search_term">Search:</label>
+                                    <input type="text" id="search_term" name="search_term" placeholder="Search by title or notes" value="{{ search_term }}">
+                                </div>
+                                <div class="search-field">
+                                    <label for="type_filter">Type:</label>
+                                    <select id="type_filter" name="type_filter">
+                                        <option value="">All Types</option>
+                                        <option value="Income" {% if type_filter == 'Income' %}selected{% endif %}>Income</option>
+                                        <option value="Expense" {% if type_filter == 'Expense' %}selected{% endif %}>Expense</option>
+                                    </select>
+                                </div>
+                                <div class="search-field">
+                                    <label for="category_filter">Category:</label>
+                                    <select id="category_filter" name="category_filter">
+                                        <option value="">All Categories</option>
+                                        {% for category in categories %}
+                                        <option value="{{ category.id }}" {% if category_filter == category.id|stringformat:"i" %}selected{% endif %}>{{ category.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="search-field date-range">
+                                    <label for="start_date">From:</label>
+                                    <input type="date" id="start_date" name="start_date" value="{{ start_date }}">
+                                </div>
+                                <div class="search-field date-range">
+                                    <label for="end_date">To:</label>
+                                    <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+                                </div>
+                            </div>
+                            <div class="search-actions">
+                                <button type="submit" class="search-button">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                                <a href="{% url 'transactions' %}" class="reset-button">
+                                    <i class="fas fa-undo"></i> Reset
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+
                     <div class="transactions-body">
                         {% if transactions %}
                         <div class="table-container">
@@ -84,7 +129,7 @@
                         </div>
                         {% else %}
                         <div class="no-data">
-                            <p>No transactions yet.</p>
+                            <p>No transactions found matching your search criteria.</p>
                         </div>
                         {% endif %}
                     </div>

@@ -246,40 +246,46 @@ def category_chart_data(request):
 @login_required
 def transactions(request):
     user = request.user
-    transactions = Transaction.objects.filter(user=user).order_by('-date')
+    transactions = Transaction.objects.filter(user=user)
     categories = Category.objects.all()
-
-    # # Get the current month and year
-    # current_month = datetime.now().month
-    # current_year = datetime.now().year
-
-    # # Calculate total income for the current month
-    # # total_income = Transaction.objects.filter(
-    # #     user=request.user,
-    # #     type='Income',
-    # #     date__month=current_month,
-    # #     date__year=current_year
-    # # ).aggregate(Sum('amount'))['amount__sum'] or 0  # Use 0 if no income
-
-    # # Calculate total expenses for the current month
-    # total_expenses = Transaction.objects.filter(
-    #     user=request.user,
-    #     type='Expense',
-    #     date__month=current_month,
-    #     date__year=current_year
-    # ).aggregate(Sum('amount'))['amount__sum'] or 0  # Use 0 if no expenses
-
-    # # Calculate the remaining balance
-    # remaining_balance = total_income - total_expenses
-
+    
+    # Get filter parameters from request
+    search_term = request.GET.get('search_term', '')
+    type_filter = request.GET.get('type_filter', '')
+    category_filter = request.GET.get('category_filter', '')
+    start_date = request.GET.get('start_date', '')
+    end_date = request.GET.get('end_date', '')
+    
+    # Apply filters if provided
+    if search_term:
+        # Search in title and notes
+        transactions = transactions.filter(title__icontains=search_term) | transactions.filter(notes__icontains=search_term)
+    
+    if type_filter:
+        transactions = transactions.filter(type=type_filter)
+    
+    if category_filter:
+        transactions = transactions.filter(category_id=category_filter)
+    
+    if start_date:
+        transactions = transactions.filter(date__gte=start_date)
+    
+    if end_date:
+        transactions = transactions.filter(date__lte=end_date)
+    
+    # Order by date, newest first
+    transactions = transactions.order_by('-date')
+    
     return render(request, 'accounts/transactions.html', {
-        'transactions': transactions,  # Changed from user_transactions to transactions
-        # 'total_income': total_income,
-        # 'total_expenses': total_expenses,
-        # 'remaining_balance': remaining_balance,
+        'transactions': transactions,
+        'categories': categories,
+        'search_term': search_term,
+        'type_filter': type_filter,
+        'category_filter': category_filter,
+        'start_date': start_date,
+        'end_date': end_date,
     })
-
-
+    
 # Create Transaction View
 @login_required
 def create_transaction(request):

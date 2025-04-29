@@ -106,6 +106,105 @@ body {
     color: #2d3748;
 }
 
+/* Search Section */
+.search-section {
+    padding: 20px 25px;
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+}
+
+.search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.search-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.search-field {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.search-field label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.search-field input,
+.search-field select {
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    color: #2d3748;
+    background-color: white;
+}
+
+.search-field input:focus,
+.search-field select:focus {
+    border-color: #3182ce;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.2);
+}
+
+.date-range {
+    flex: 0.5;
+    min-width: 150px;
+}
+
+.search-actions {
+    display: flex;
+    gap: 10px;
+    align-self: flex-end;
+}
+
+.search-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-button:hover {
+    background-color: #2d4ba0;
+}
+
+.reset-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #e2e8f0;
+    color: #4a5568;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.reset-button:hover {
+    background-color: #cbd5e0;
+}
+
+/* Transactions Body */
 .transactions-body {
     padding: 20px 25px;
 }
@@ -256,6 +355,25 @@ body {
 
     .logout-button span {
         display: none;
+    }
+
+    .search-inputs {
+        flex-direction: column;
+    }
+    
+    .search-field {
+        width: 100%;
+    }
+    
+    .search-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .search-button,
+    .reset-button {
+        width: 100%;
+        justify-content: center;
     }
 
     .transactions-content {
