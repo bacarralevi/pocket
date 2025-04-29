@@ -1,0 +1,165 @@
+/* Base styles and variables */
+:root {
+    --primary-blue: #1a365d;
+    --secondary-blue: #2c5282;
+    --light-blue: #4299e1;
+    --accent-blue: #3182ce;
+    --white: #ffffff;
+    --light-gray: #f7fafc;
+    --gray: #e2e8f0;
+    --text-dark: #2d3748;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+    --input-border: #cbd5e0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--light-gray);
+    color: var(--text-dark);
+    line-height: 1.6;
+    padding: 0;
+    margin: 0;
+}
+
+/* Container */
+.transaction-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+/* Header */
+.transaction-header {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    padding: 1.5rem;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    margin: -2rem -2rem 2rem -2rem;
+}
+
+.transaction-header h2 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+/* Form styles */
+.transaction-form {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+label {
+    font-weight: 600;
+    color: var(--primary-blue);
+    font-size: 0.95rem;
+}
+
+input,
+select,
+textarea {
+    padding: 0.75rem;
+    border: 1px solid var(--input-border);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    width: 100%;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Button styles */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+button {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--secondary-blue);
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.4);
+}
+
+/* Link styles */
+.back-link {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: var(--accent-blue);
+    text-decoration: underline;
+}
+
+/* Type-specific styling */
+.type-income {
+    border-left: 4px solid #38a169;
+    /* Green for income */
+}
+
+.type-expense {
+    border-left: 4px solid #e53e3e;
+    /* Red for expenses */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .transaction-container {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .transaction-header {
+        padding: 1rem;
+        margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+}

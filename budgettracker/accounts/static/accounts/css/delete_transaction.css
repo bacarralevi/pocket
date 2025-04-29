@@ -1,0 +1,192 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Container */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Delete card */
+.delete-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    overflow: hidden;
+}
+
+/* Header */
+.delete-header {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 20px 30px;
+}
+
+.delete-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* Content */
+.delete-content {
+    padding: 30px;
+}
+
+/* Warning message */
+.warning-message {
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: #fee2e2;
+    border-radius: 6px;
+    border-left: 4px solid #ef4444;
+}
+
+.warning-message p {
+    color: #b91c1c;
+    font-weight: 500;
+}
+
+/* Transaction details */
+.transaction-details {
+    margin-bottom: 30px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 20px;
+    background-color: #f8fafc;
+}
+
+.transaction-details h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #475569;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+.detail-label {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 5px;
+}
+
+.detail-value {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Form */
+.delete-form {
+    margin-top: 20px;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+}
+
+.delete-button {
+    flex: 1;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+    background-color: #dc2626;
+}
+
+.cancel-button {
+    flex: 1;
+    display: inline-block;
+    background-color: #e2e8f0;
+    color: #475569;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 6px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cancel-button:hover {
+    background-color: #cbd5e1;
+}
+
+/* Footer */
+.delete-footer {
+    padding: 20px 30px;
+    border-top: 1px solid #e2e8f0;
+    text-align: left;
+}
+
+.back-link {
+    color: #1e3a8a;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full-width {
+        grid-column: span 1;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .delete-card {
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .container {
+        padding: 0;
+    }
+}

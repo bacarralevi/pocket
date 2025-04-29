@@ -1,0 +1,152 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Container */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Register card */
+.register-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 480px;
+    /* Slightly wider than login for more form fields */
+    padding: 40px;
+}
+
+/* Header */
+.register-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.register-header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #2d3748;
+}
+
+.subtitle {
+    color: #718096;
+    font-size: 16px;
+}
+
+/* Form */
+.register-form {
+    margin-bottom: 25px;
+}
+
+.form-fields {
+    margin-bottom: 20px;
+}
+
+/* Django form styling */
+.register-form p {
+    margin-bottom: 20px;
+}
+
+.register-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.register-form input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.register-form input:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+/* Help text */
+.register-form .helptext {
+    display: block;
+    font-size: 14px;
+    color: #718096;
+    margin-top: 5px;
+}
+
+/* Error messages */
+.register-form ul.errorlist {
+    list-style: none;
+    color: #e53e3e;
+    font-size: 14px;
+    margin-top: 5px;
+    padding-left: 0;
+}
+
+/* Button */
+.register-button {
+    width: 100%;
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.register-button:hover {
+    background-color: #3182ce;
+}
+
+/* Footer */
+.register-footer {
+    text-align: center;
+    color: #718096;
+    font-size: 15px;
+}
+
+.login-link {
+    color: #4299e1;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.login-link:hover {
+    color: #3182ce;
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .register-card {
+        padding: 20px 15px;
+    }
+
+    .register-header h1 {
+        font-size: 24px;
+    }
+}
