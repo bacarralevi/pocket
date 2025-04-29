@@ -110,66 +110,87 @@
                 </div>
             </section>
 
-            <section class="section-graphs">
-                <div class="section-header">
-                    <h2>Financial Trends</h2>
-                    <div class="view-toggle">
-                        <button id="monthlyViewBtn" class="toggle-btn active">Monthly View</button>
-                        <button id="yearlyViewBtn" class="toggle-btn">Yearly View</button>
-                    </div>
-                </div>
-
-                <div class="date-selector">
-                    <!-- Monthly view selectors -->
-                    <div id="monthlySelectors" class="selector-group">
-                        <div class="selector">
-                            <label for="monthSelector">Month:</label>
-                            <select id="monthSelector" class="date-select">
-                                <option value="1">January</option>
-                                <option value="2">February</option>
-                                <option value="3">March</option>
-                                <option value="4">April</option>
-                                <option value="5">May</option>
-                                <option value="6">June</option>
-                                <option value="7">July</option>
-                                <option value="8">August</option>
-                                <option value="9">September</option>
-                                <option value="10">October</option>
-                                <option value="11">November</option>
-                                <option value="12">December</option>
-                            </select>
+            <!-- Chart Section -->
+            <div class="charts-container">
+                <!-- Bar Chart Section -->
+                <section class="section-graphs">
+                    <div class="section-header">
+                        <h2>Income & Expenses</h2>
+                        <div class="view-toggle">
+                            <button id="monthlyViewBtn" class="toggle-btn active">Monthly View</button>
+                            <button id="yearlyViewBtn" class="toggle-btn">Yearly View</button>
                         </div>
-                        <div class="selector">
-                            <label for="yearSelectorMonthly">Year:</label>
-                            <select id="yearSelectorMonthly" class="date-select">
-                                <option value="{{ current_year|add:'-2' }}">{{ current_year|add:'-2' }}</option>
-                                <option value="{{ current_year|add:'-1' }}">{{ current_year|add:'-1' }}</option>
-                                <option value="{{ current_year }}" selected>{{ current_year }}</option>
-                            </select>
-                        </div>
-                        <button id="updateMonthlyBtn" class="update-btn">Update</button>
                     </div>
 
-                    <!-- Yearly view selector -->
-                    <div id="yearlySelectors" class="selector-group" style="display: none;">
-                        <div class="selector">
-                            <label for="yearSelectorYearly">Year:</label>
-                            <select id="yearSelectorYearly" class="date-select">
-                                <option value="{{ current_year|add:'-2' }}">{{ current_year|add:'-2' }}</option>
-                                <option value="{{ current_year|add:'-1' }}">{{ current_year|add:'-1' }}</option>
-                                <option value="{{ current_year }}" selected>{{ current_year }}</option>
-                            </select>
+                    <div class="date-selector">
+                        <!-- Monthly view selectors -->
+                        <div id="monthlySelectors" class="selector-group">
+                            <div class="selector">
+                                <label for="monthSelector">Month:</label>
+                                <select id="monthSelector" class="date-select">
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                            <div class="selector">
+                                <label for="yearSelectorMonthly">Year:</label>
+                                <select id="yearSelectorMonthly" class="date-select">
+                                    <option value="{{ current_year|add:'-2' }}">{{ current_year|add:'-2' }}</option>
+                                    <option value="{{ current_year|add:'-1' }}">{{ current_year|add:'-1' }}</option>
+                                    <option value="{{ current_year }}" selected>{{ current_year }}</option>
+                                </select>
+                            </div>
+                            <button id="updateMonthlyBtn" class="update-btn">Update</button>
                         </div>
-                        <button id="updateYearlyBtn" class="update-btn">Update</button>
-                    </div>
-                </div>
 
-                <div class="graph-container">
-                    <div id="chart-title" class="chart-title">Daily Transactions - {{ current_month_name }}</div>
-                    <canvas id="financialChart"></canvas>
-                    <div id="chart-loading" class="chart-loading">Loading chart data...</div>
-                </div>
-            </section>
+                        <!-- Yearly view selector -->
+                        <div id="yearlySelectors" class="selector-group" style="display: none;">
+                            <div class="selector">
+                                <label for="yearSelectorYearly">Year:</label>
+                                <select id="yearSelectorYearly" class="date-select">
+                                    <option value="{{ current_year|add:'-2' }}">{{ current_year|add:'-2' }}</option>
+                                    <option value="{{ current_year|add:'-1' }}">{{ current_year|add:'-1' }}</option>
+                                    <option value="{{ current_year }}" selected>{{ current_year }}</option>
+                                </select>
+                            </div>
+                            <button id="updateYearlyBtn" class="update-btn">Update</button>
+                        </div>
+                    </div>
+
+                    <div class="graph-container">
+                        <div id="chart-title" class="chart-title">Daily Transactions - {{ current_month_name }}</div>
+                        <canvas id="financialChart"></canvas>
+                        <div id="chart-loading" class="chart-loading">Loading chart data...</div>
+                    </div>
+                </section>
+
+                <!-- Expense Categories Pie Chart Section -->
+                <section class="section-graphs">
+                    <div class="section-header">
+                        <h2>Expense Categories</h2>
+                        <div class="period-label" id="pieChartPeriod">{{ current_month_name }} {{ current_year }}</div>
+                    </div>
+
+                    <div class="graph-container pie-container">
+                        <canvas id="categoryPieChart"></canvas>
+                        <div id="pie-chart-loading" class="chart-loading">Loading category data...</div>
+                        <div id="no-data-message" class="no-data-message" style="display: none;">
+                            <i class="fas fa-info-circle"></i>
+                            <p>No expense data available for this period.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </main>
 
         <!-- Footer -->
@@ -184,6 +205,7 @@
             const monthlyViewBtn = document.getElementById('monthlyViewBtn');
             const yearlyViewBtn = document.getElementById('yearlyViewBtn');
             const chartTitle = document.getElementById('chart-title');
+            const pieChartPeriod = document.getElementById('pieChartPeriod');
             
             // Set up selector groups
             const monthlySelectors = document.getElementById('monthlySelectors');
@@ -196,19 +218,23 @@
             const updateMonthlyBtn = document.getElementById('updateMonthlyBtn');
             const updateYearlyBtn = document.getElementById('updateYearlyBtn');
             
-            // Set up loading indicator
+            // Set up loading indicators
             const chartContainer = document.querySelector('.graph-container');
             const loadingIndicator = document.getElementById('chart-loading');
+            const pieLoadingIndicator = document.getElementById('pie-chart-loading');
+            const noDataMessage = document.getElementById('no-data-message');
             
-            // Chart variable
+            // Chart variables
             let currentChart = null;
+            let categoryPieChart = null;
             
             // Set current date as default
             const currentDate = new Date();
             monthSelector.value = currentDate.getMonth() + 1; // JavaScript months are 0-indexed
             
-            // Default view
+            // Default views
             loadMonthlyData(monthSelector.value, yearSelectorMonthly.value);
+            loadCategoryData(monthSelector.value, yearSelectorMonthly.value, 'monthly');
             
             // Add event listeners to toggle buttons
             monthlyViewBtn.addEventListener('click', function() {
@@ -216,6 +242,7 @@
                     setActiveButton(monthlyViewBtn);
                     setActiveSelectors('monthly');
                     loadMonthlyData(monthSelector.value, yearSelectorMonthly.value);
+                    loadCategoryData(monthSelector.value, yearSelectorMonthly.value, 'monthly');
                 }
             });
             
@@ -224,16 +251,19 @@
                     setActiveButton(yearlyViewBtn);
                     setActiveSelectors('yearly');
                     loadYearlyData(yearSelectorYearly.value);
+                    loadCategoryData(null, yearSelectorYearly.value, 'yearly');
                 }
             });
             
             // Add event listeners to update buttons
             updateMonthlyBtn.addEventListener('click', function() {
                 loadMonthlyData(monthSelector.value, yearSelectorMonthly.value);
+                loadCategoryData(monthSelector.value, yearSelectorMonthly.value, 'monthly');
             });
             
             updateYearlyBtn.addEventListener('click', function() {
                 loadYearlyData(yearSelectorYearly.value);
+                loadCategoryData(null, yearSelectorYearly.value, 'yearly');
             });
             
             function setActiveButton(activeButton) {
@@ -255,23 +285,24 @@
                 }
             }
             
-            function showLoading() {
-                if (loadingIndicator) {
-                    loadingIndicator.style.display = 'flex';
+            function showLoading(indicator) {
+                if (indicator) {
+                    indicator.style.display = 'flex';
                 }
             }
             
-            function hideLoading() {
-                if (loadingIndicator) {
-                    loadingIndicator.style.display = 'none';
+            function hideLoading(indicator) {
+                if (indicator) {
+                    indicator.style.display = 'none';
                 }
             }
             
-            function destroyCurrentChart() {
-                if (currentChart) {
-                    currentChart.destroy();
-                    currentChart = null;
+            function destroyChart(chart) {
+                if (chart) {
+                    chart.destroy();
+                    return null;
                 }
+                return null;
             }
             
             function getMonthName(monthNum) {
@@ -283,7 +314,7 @@
             }
             
             function loadMonthlyData(month, year) {
-                showLoading();
+                showLoading(loadingIndicator);
                 const monthName = getMonthName(month);
                 chartTitle.textContent = `Daily Transactions - ${monthName} ${year}`;
                 
@@ -295,14 +326,14 @@
                         return response.json();
                     })
                     .then(chartData => {
-                        hideLoading();
+                        hideLoading(loadingIndicator);
                         
                         // Prepare arrays for chart
                         const days = chartData.map(item => item.day);
                         const incomeData = chartData.map(item => item.income);
                         const expenseData = chartData.map(item => item.expenses);
                         
-                        destroyCurrentChart();
+                        currentChart = destroyChart(currentChart);
                         
                         const ctx = document.getElementById('financialChart');
                         
@@ -381,7 +412,7 @@
                         console.error("Error loading monthly data:", error);
                         
                         // Show error message in the graph container
-                        hideLoading();
+                        hideLoading(loadingIndicator);
                         if (chartContainer) {
                             loadingIndicator.innerHTML = `<div style="padding: 20px; color: red;">Failed to load chart: ${error.message}</div>`;
                             loadingIndicator.style.display = 'flex';
@@ -390,7 +421,7 @@
             }
             
             function loadYearlyData(year) {
-                showLoading();
+                showLoading(loadingIndicator);
                 chartTitle.textContent = `Monthly Transactions - ${year}`;
                 
                 fetch(`{% url "dashboard_chart_data" %}?view=yearly&year=${year}`)
@@ -401,14 +432,14 @@
                         return response.json();
                     })
                     .then(chartData => {
-                        hideLoading();
+                        hideLoading(loadingIndicator);
                         
                         // Prepare arrays for chart
                         const months = chartData.map(item => item.month);
                         const incomeData = chartData.map(item => item.income);
                         const expenseData = chartData.map(item => item.expenses);
                         
-                        destroyCurrentChart();
+                        currentChart = destroyChart(currentChart);
                         
                         const ctx = document.getElementById('financialChart');
                         
@@ -484,12 +515,142 @@
                         console.error("Error loading yearly data:", error);
                         
                         // Show error message in the graph container
-                        hideLoading();
+                        hideLoading(loadingIndicator);
                         if (chartContainer) {
                             loadingIndicator.innerHTML = `<div style="padding: 20px; color: red;">Failed to load chart: ${error.message}</div>`;
                             loadingIndicator.style.display = 'flex';
                         }
                     });
+            }
+            
+            function loadCategoryData(month, year, viewType) {
+                showLoading(pieLoadingIndicator);
+                noDataMessage.style.display = 'none';
+                
+                let url = `{% url "category_chart_data" %}?year=${year}`;
+                let periodLabel = `${year}`;
+                
+                if (viewType === 'monthly' && month) {
+                    url += `&month=${month}`;
+                    const monthName = getMonthName(month);
+                    periodLabel = `${monthName} ${year}`;
+                }
+                
+                pieChartPeriod.textContent = periodLabel;
+                
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(categoryData => {
+                        hideLoading(pieLoadingIndicator);
+                        
+                        // Check if there's any data
+                        const hasData = categoryData.some(item => item.amount > 0);
+                        
+                        if (!hasData) {
+                            noDataMessage.style.display = 'flex';
+                            categoryPieChart = destroyChart(categoryPieChart);
+                            return;
+                        }
+                        
+                        noDataMessage.style.display = 'none';
+                        
+                        // Prepare data for pie chart
+                        const labels = categoryData.map(item => item.category);
+                        const amounts = categoryData.map(item => item.amount);
+                        
+                        // Generate colors for each category
+                        const backgroundColors = generateColors(categoryData.length);
+                        
+                        categoryPieChart = destroyChart(categoryPieChart);
+                        
+                        const ctx = document.getElementById('categoryPieChart');
+                        
+                        categoryPieChart = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    data: amounts,
+                                    backgroundColor: backgroundColors,
+                                    borderColor: 'white',
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        position: 'right',
+                                        labels: {
+                                            boxWidth: 15,
+                                            padding: 15
+                                        }
+                                    },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(context) {
+                                                const label = context.label || '';
+                                                const value = context.parsed || 0;
+                                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                                const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                                return `${label}: $${value.toFixed(2)} (${percentage}%)`;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error loading category data:", error);
+                        
+                        // Show error message
+                        hideLoading(pieLoadingIndicator);
+                        noDataMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i><p>Failed to load category data: ${error.message}</p>`;
+                        noDataMessage.style.display = 'flex';
+                    });
+            }
+            
+            // Generate colors for pie chart
+            function generateColors(count) {
+                // Predefined colors for common categories
+                const colorPalette = [
+                    '#FF6384', // red
+                    '#36A2EB', // blue
+                    '#FFCE56', // yellow
+                    '#4BC0C0', // teal
+                    '#9966FF', // purple
+                    '#FF9F40', // orange
+                    '#C9CBCF', // grey
+                    '#7ED321', // green
+                    '#50E3C2', // mint
+                    '#B8E986', // light green
+                    '#D667CE', // pink
+                    '#F8E71C'  // bright yellow
+                ];
+                
+                // If we have more categories than colors, generate additional colors
+                if (count <= colorPalette.length) {
+                    return colorPalette.slice(0, count);
+                }
+                
+                const colors = [...colorPalette];
+                
+                // Generate additional random colors
+                for (let i = colorPalette.length; i < count; i++) {
+                    const r = Math.floor(Math.random() * 200 + 55);
+                    const g = Math.floor(Math.random() * 200 + 55);
+                    const b = Math.floor(Math.random() * 200 + 55);
+                    colors.push(`rgb(${r}, ${g}, ${b})`);
+                }
+                
+                return colors;
             }
         });
     </script>

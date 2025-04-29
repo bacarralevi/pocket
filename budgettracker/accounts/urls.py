@@ -13,6 +13,7 @@ urlpatterns = [
     # Dashboard URLs
     path('dashboard/', views.dashboard, name='dashboard'),
     path('dashboard/chart-data/', views.dashboard_chart_data, name='dashboard_chart_data'),
+    path('dashboard/category-data/', views.category_chart_data, name='category_chart_data'),
     
     # Transaction URLs
     path('transactions/', views.transactions, name='transactions'),

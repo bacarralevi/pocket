@@ -194,6 +194,53 @@ def get_yearly_chart_data(request):
     # Return the data as JSON
     return JsonResponse(monthly_data, safe=False)
 
+# Category chart data endpoint
+@login_required
+def category_chart_data(request):
+    # Get the requested month and year
+    try:
+        month = request.GET.get('month')
+        year = int(request.GET.get('year', datetime.now().year))
+        
+        # Convert month to integer if provided
+        if month:
+            month = int(month)
+    except ValueError:
+        # If invalid parameters are provided, use current date
+        month = None
+        year = datetime.now().year
+    
+    # Get expense data by category
+    category_data = []
+    
+    # Build the query filter
+    filter_args = {
+        'user': request.user,
+        'type': 'Expense',
+        'date__year': year
+    }
+    
+    # Add month filter if specified
+    if month:
+        filter_args['date__month'] = month
+    
+    # Get all the categories that have expenses
+    expenses_by_category = Transaction.objects.filter(**filter_args).values(
+        'category__name'
+    ).annotate(
+        total=Sum('amount')
+    ).order_by('-total')
+    
+    # Process results - handle transactions without categories
+    for expense in expenses_by_category:
+        category_name = expense['category__name'] or 'Uncategorized'
+        category_data.append({
+            'category': category_name,
+            'amount': float(expense['total'])
+        })
+    
+    # Return the data as JSON
+    return JsonResponse(category_data, safe=False)
 
 # Transactions View
 @login_required
