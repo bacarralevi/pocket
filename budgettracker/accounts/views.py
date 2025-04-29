@@ -1,5 +1,7 @@
 import calendar
 import json
+from django.http import JsonResponse # type: ignore
+from django.core.serializers.json import DjangoJSONEncoder # type: ignore
 from .models import Transaction, Category, Budget
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm # type: ignore
@@ -77,11 +79,27 @@ def dashboard(request):
     # Calculate the remaining balance
     remaining_balance = total_income - total_expenses
     
+    # Pass the data to the template without chart data
+    return render(request, 'accounts/dashboard.html', {
+        'current_month_name': current_month_name,
+        'total_income': total_income,
+        'total_expenses': total_expenses,
+        'remaining_balance': remaining_balance,
+        'days_in_month': num_days,
+    })
+
+# New endpoint for chart data
+@login_required
+def dashboard_chart_data(request):
+    # Get the current month and year
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+    
+    # Get days in the current month
+    _, num_days = calendar.monthrange(current_year, current_month)
+    
     # Get daily income and expense data for chart
     daily_data = []
-    
-    # First day of the month
-    start_date = datetime(current_year, current_month, 1).date()
     
     # Iterate through each day of the month
     for day in range(1, num_days + 1):
@@ -108,19 +126,8 @@ def dashboard(request):
             'expenses': float(day_expenses)
         })
     
-    # Convert daily data to JSON for chart
-    chart_data = mark_safe(json.dumps(daily_data))
-    
-    # Pass the data to the template
-    return render(request, 'accounts/dashboard.html', {
-        'current_month_name': current_month_name,
-        'total_income': total_income,
-        'total_expenses': total_expenses,
-        'remaining_balance': remaining_balance,
-        'chart_data': chart_data,
-        'days_in_month': num_days,
-    })
-
+    # Return the data as JSON
+    return JsonResponse(daily_data, safe=False)
 
 # Transactions View
 @login_required
