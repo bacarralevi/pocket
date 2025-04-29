@@ -1,3 +1,4 @@
+myenv/
 # Ignore Python bytecode files
 *.pyc
 __pycache__/
@@ -10,4 +11,3 @@ budgettracker/accounts/migrations/
 db.sqlite3
 budgettracker/db.sqlite3
 
-myenv/
