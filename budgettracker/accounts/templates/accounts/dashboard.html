@@ -9,6 +9,18 @@
     <link rel="stylesheet" href="{% static 'accounts/css/dashboard.css' %}">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Define global variables with Django template tags before loading the script -->
+    <script>
+        // Define URLs for API endpoints
+        window.chartDataUrl = "{% url 'dashboard_chart_data' %}";
+        window.categoryDataUrl = "{% url 'category_chart_data' %}";
+    </script>
+    
+    <!-- Custom JavaScript (load after defining global variables) -->
+    <script src="{% static 'accounts/js/dashboard.js' %}"></script>
 </head>
 
 <body>
@@ -46,7 +58,7 @@
                 <div class="financial-cards">
                     <div class="financial-card income">
                         <div class="card-icon">
-                            <i class="fas fa-arrow-down"></i>
+                            <i class="fas fa-arrow-up"></i>
                         </div>
                         <div class="card-content">
                             <h3>Income</h3>
@@ -57,7 +69,7 @@
 
                     <div class="financial-card expenses">
                         <div class="card-icon">
-                            <i class="fas fa-arrow-up"></i>
+                            <i class="fas fa-arrow-down"></i>
                         </div>
                         <div class="card-content">
                             <h3>Expenses</h3>
@@ -107,6 +119,89 @@
                     </a>
                 </div>
             </section>
+
+            <!-- Chart Section -->
+            <div class="charts-container">
+                <!-- Bar Chart Section -->
+                <section class="section-graphs">
+                    <div class="section-header">
+                        <h2>Income & Expenses</h2>
+                        <div class="view-toggle">
+                            <button id="monthlyViewBtn" class="toggle-btn active">Monthly View</button>
+                            <button id="yearlyViewBtn" class="toggle-btn">Yearly View</button>
+                        </div>
+                    </div>
+
+                    <div class="date-selector">
+                        <!-- Monthly view selectors -->
+                        <div id="monthlySelectors" class="selector-group">
+                            <div class="selector">
+                                <label for="monthSelector">Month:</label>
+                                <select id="monthSelector" class="date-select">
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                            <div class="selector">
+                                <label for="yearSelectorMonthly">Year:</label>
+                                <select id="yearSelectorMonthly" class="date-select">
+                                    <option value="{{ current_year|add:'-2' }}">{{ current_year|add:'-2' }}</option>
+                                    <option value="{{ current_year|add:'-1' }}">{{ current_year|add:'-1' }}</option>
+                                    <option value="{{ current_year }}" selected>{{ current_year }}</option>
+                                </select>
+                            </div>
+                            <button id="updateMonthlyBtn" class="update-btn">Update</button>
+                        </div>
+
+                        <!-- Yearly view selector -->
+                        <div id="yearlySelectors" class="selector-group" style="display: none;">
+                            <div class="selector">
+                                <label for="yearSelectorYearly">Year:</label>
+                                <select id="yearSelectorYearly" class="date-select">
+                                    <option value="{{ current_year|add:'-2' }}">{{ current_year|add:'-2' }}</option>
+                                    <option value="{{ current_year|add:'-1' }}">{{ current_year|add:'-1' }}</option>
+                                    <option value="{{ current_year }}" selected>{{ current_year }}</option>
+                                </select>
+                            </div>
+                            <button id="updateYearlyBtn" class="update-btn">Update</button>
+                        </div>
+                    </div>
+
+                    <div class="graph-container">
+                        <div id="chart-title" class="chart-title">Daily Transactions - {{ current_month_name }}</div>
+                        <canvas id="financialChart"></canvas>
+                        <div id="chart-loading" class="chart-loading">Loading chart data...</div>
+                    </div>
+                </section>
+
+                <!-- Expense Categories Pie Chart Section -->
+                <section class="section-graphs">
+                    <div class="section-header">
+                        <h2>Expense Categories</h2>
+                        <div class="period-label" id="pieChartPeriod">{{ current_month_name }} {{ current_year }}</div>
+                    </div>
+
+                    <div class="graph-container pie-container">
+                        <canvas id="categoryPieChart"></canvas>
+                        <div id="pieLegendContainer" class="chart-legend-container"></div>
+                        <div id="pie-chart-loading" class="chart-loading">Loading category data...</div>
+                        <div id="no-data-message" class="no-data-message" style="display: none;">
+                            <i class="fas fa-info-circle"></i>
+                            <p>No expense data available for this period.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </main>
 
         <!-- Footer -->

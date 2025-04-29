@@ -239,6 +239,201 @@ body {
     color: #718096;
 }
 
+/* Chart Section */
+/* Chart toggle buttons */
+.view-toggle {
+    display: flex;
+    gap: 10px;
+}
+
+.toggle-btn {
+    background-color: #f5f7fa;
+    border: 1px solid #e2e8f0;
+    color: #718096;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+    background-color: #edf2f7;
+}
+
+.toggle-btn.active {
+    background-color: #1e3a8a;
+    color: white;
+    border-color: #1e3a8a;
+}
+.section-graphs {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    margin-top: 10px;
+}
+
+.graph-container {
+    height: 400px;
+    position: relative;
+    margin-top: 20px;
+}
+
+/* Chart title */
+.chart-title {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #4a5568;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+/* Loading indicator (previous styles) */
+.chart-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #718096;
+    font-size: 1rem;
+}
+
+.date-selector {
+    margin: 15px 0;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Selector group */
+.selector-group {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+/* Individual selector */
+.selector {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.selector label {
+    font-size: 0.9rem;
+    color: #4a5568;
+    font-weight: 500;
+}
+
+.date-select {
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background-color: #f8fafc;
+    color: #1a202c;
+    font-size: 0.9rem;
+    min-width: 150px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+}
+
+.date-select:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+/* Update button */
+.update-btn {
+    padding: 8px 16px;
+    background-color: #1e3a8a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    height: 38px;
+}
+
+.update-btn:hover {
+    background-color: #2c4999;
+}
+
+.update-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.3);
+}
+
+/* Category Chart Section */
+
+/* Charts container for layout */
+.charts-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+@media (min-width: 1100px) {
+    .charts-container {
+        grid-template-columns: 3fr 2fr;
+    }
+}
+
+/* Pie chart specific styling */
+.pie-container {
+    min-height: 350px;
+    position: relative;
+}
+
+.period-label {
+    font-size: 0.95rem;
+    color: #718096;
+    font-weight: 500;
+}
+
+/* No data message styling */
+.no-data-message {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+    color: #718096;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.no-data-message i {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #CBD5E0;
+}
+
+.no-data-message p {
+    font-size: 1rem;
+    max-width: 250px;
+}
+
 /* Footer */
 .app-footer {
     background-color: #1e3a8a;
@@ -279,7 +474,42 @@ body {
     .amount {
         font-size: 1.5rem;
     }
+
+    .graph-container {
+        height: 300px;
+    }
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .view-toggle {
+        width: 100%;
+    }
+    
+    .toggle-btn {
+        flex: 1;
+        text-align: center;
+    }
+
+    .selector-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .date-select {
+        width: 100%;
+        min-width: unset;
+    }
+    
+    .update-btn {
+        width: 100%;
+    }
 }
+
+
 
 @media (max-width: 480px) {
     .user-info span {
@@ -296,5 +526,9 @@ body {
         width: 50px;
         height: 50px;
         font-size: 1.2rem;
+    }
+
+    .graph-container {
+        height: 250px;
     }
 }
