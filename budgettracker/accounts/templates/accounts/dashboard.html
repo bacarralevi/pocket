@@ -112,14 +112,18 @@
 
             <section class="section-graphs">
                 <div class="section-header">
-                    <h2>Daily Transactions - {{ current_month_name }}</h2>
+                    <h2>Financial Trends</h2>
+                    <div class="view-toggle">
+                        <button id="monthlyViewBtn" class="toggle-btn active">Monthly View</button>
+                        <button id="yearlyViewBtn" class="toggle-btn">Yearly View</button>
+                    </div>
                 </div>
 
                 <div class="graph-container">
-                    <canvas id="dailyChart"></canvas>
+                    <div id="chart-title" class="chart-title">Daily Transactions - {{ current_month_name }}</div>
+                    <canvas id="financialChart"></canvas>
                     <div id="chart-loading" class="chart-loading">Loading chart data...</div>
                 </div>
-
             </section>
         </main>
 
@@ -131,113 +135,272 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Set up toggle buttons
+            const monthlyViewBtn = document.getElementById('monthlyViewBtn');
+            const yearlyViewBtn = document.getElementById('yearlyViewBtn');
+            const chartTitle = document.getElementById('chart-title');
+            
             // Set up loading indicator
             const chartContainer = document.querySelector('.graph-container');
             const loadingIndicator = document.getElementById('chart-loading');
             
-            // Fetch chart data from API endpoint
-            fetch('{% url "dashboard_chart_data" %}')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(chartData => {
-                    // Hide loading indicator
-                    if (loadingIndicator) {
-                        loadingIndicator.style.display = 'none';
-                    }
-                    
-                    console.log("Chart data loaded:", chartData);
-                    
-                    // Prepare arrays for chart
-                    const days = chartData.map(item => item.day);
-                    const incomeData = chartData.map(item => item.income);
-                    const expenseData = chartData.map(item => item.expenses);
-                    
-                    const ctx = document.getElementById('dailyChart');
-                    
-                    new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: days,
-                            datasets: [
-                                {
-                                    label: 'Income',
-                                    data: incomeData,
-                                    backgroundColor: 'rgba(72, 187, 120, 0.7)',
-                                    borderColor: '#48bb78',
-                                    borderWidth: 1
-                                },
-                                {
-                                    label: 'Expenses',
-                                    data: expenseData,
-                                    backgroundColor: 'rgba(245, 101, 101, 0.7)',
-                                    borderColor: '#f56565',
-                                    borderWidth: 1
-                                }
-                            ]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    title: {
-                                        display: true,
-                                        text: 'Amount ($)'
+            // Chart variable
+            let currentChart = null;
+            
+            // Default view
+            loadMonthlyData();
+            
+            // Add event listeners to toggle buttons
+            monthlyViewBtn.addEventListener('click', function() {
+                if (!this.classList.contains('active')) {
+                    setActiveButton(monthlyViewBtn);
+                    loadMonthlyData();
+                }
+            });
+            
+            yearlyViewBtn.addEventListener('click', function() {
+                if (!this.classList.contains('active')) {
+                    setActiveButton(yearlyViewBtn);
+                    loadYearlyData();
+                }
+            });
+            
+            function setActiveButton(activeButton) {
+                // Remove active class from all buttons
+                document.querySelectorAll('.toggle-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                // Add active class to selected button
+                activeButton.classList.add('active');
+            }
+            
+            function showLoading() {
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'flex';
+                }
+            }
+            
+            function hideLoading() {
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                }
+            }
+            
+            function destroyCurrentChart() {
+                if (currentChart) {
+                    currentChart.destroy();
+                    currentChart = null;
+                }
+            }
+            
+            function loadMonthlyData() {
+                showLoading();
+                chartTitle.textContent = 'Daily Transactions - {{ current_month_name }}';
+                
+                fetch('{% url "dashboard_chart_data" %}?view=monthly')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(chartData => {
+                        hideLoading();
+                        
+                        // Prepare arrays for chart
+                        const days = chartData.map(item => item.day);
+                        const incomeData = chartData.map(item => item.income);
+                        const expenseData = chartData.map(item => item.expenses);
+                        
+                        destroyCurrentChart();
+                        
+                        const ctx = document.getElementById('financialChart');
+                        
+                        currentChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: days,
+                                datasets: [
+                                    {
+                                        label: 'Income',
+                                        data: incomeData,
+                                        backgroundColor: 'rgba(72, 187, 120, 0.7)',
+                                        borderColor: '#48bb78',
+                                        borderWidth: 1
                                     },
-                                    grid: {
-                                        color: 'rgba(0, 0, 0, 0.05)'
+                                    {
+                                        label: 'Expenses',
+                                        data: expenseData,
+                                        backgroundColor: 'rgba(245, 101, 101, 0.7)',
+                                        borderColor: '#f56565',
+                                        borderWidth: 1
                                     }
-                                },
-                                x: {
-                                    title: {
-                                        display: true,
-                                        text: 'Day of Month'
-                                    },
-                                    grid: {
-                                        display: false
-                                    }
-                                }
+                                ]
                             },
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Daily Income and Expenses'
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        title: function(tooltipItems) {
-                                            return 'Day ' + tooltipItems[0].label;
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        title: {
+                                            display: true,
+                                            text: 'Amount ($)'
                                         },
-                                        label: function(context) {
-                                            let label = context.dataset.label || '';
-                                            if (label) {
-                                                label += ': ';
+                                        grid: {
+                                            color: 'rgba(0, 0, 0, 0.05)'
+                                        }
+                                    },
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: 'Day of Month'
+                                        },
+                                        grid: {
+                                            display: false
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
+                                    title: {
+                                        display: false
+                                    },
+                                    tooltip: {
+                                        callbacks: {
+                                            title: function(tooltipItems) {
+                                                return 'Day ' + tooltipItems[0].label;
+                                            },
+                                            label: function(context) {
+                                                let label = context.dataset.label || '';
+                                                if (label) {
+                                                    label += ': ';
+                                                }
+                                                label += '$' + context.parsed.y.toFixed(2);
+                                                return label;
                                             }
-                                            label += '$' + context.parsed.y.toFixed(2);
-                                            return label;
                                         }
                                     }
                                 }
                             }
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error loading monthly data:", error);
+                        
+                        // Show error message in the graph container
+                        hideLoading();
+                        if (chartContainer) {
+                            loadingIndicator.innerHTML = `<div style="padding: 20px; color: red;">Failed to load chart: ${error.message}</div>`;
+                            loadingIndicator.style.display = 'flex';
                         }
                     });
-                })
-                .catch(error => {
-                    console.error("Error creating chart:", error);
-                    
-                    // Show error message in the graph container
-                    if (chartContainer) {
-                        loadingIndicator.innerHTML = `<div style="padding: 20px; color: red;">Failed to load chart: ${error.message}</div>`;
-                    }
-                });
+            }
+            
+            function loadYearlyData() {
+                showLoading();
+                chartTitle.textContent = 'Monthly Transactions - {{ current_year }}';
+                
+                fetch('{% url "dashboard_chart_data" %}?view=yearly')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(chartData => {
+                        hideLoading();
+                        
+                        // Prepare arrays for chart
+                        const months = chartData.map(item => item.month);
+                        const incomeData = chartData.map(item => item.income);
+                        const expenseData = chartData.map(item => item.expenses);
+                        
+                        destroyCurrentChart();
+                        
+                        const ctx = document.getElementById('financialChart');
+                        
+                        currentChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: months,
+                                datasets: [
+                                    {
+                                        label: 'Income',
+                                        data: incomeData,
+                                        backgroundColor: 'rgba(72, 187, 120, 0.7)',
+                                        borderColor: '#48bb78',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Expenses',
+                                        data: expenseData,
+                                        backgroundColor: 'rgba(245, 101, 101, 0.7)',
+                                        borderColor: '#f56565',
+                                        borderWidth: 1
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        title: {
+                                            display: true,
+                                            text: 'Amount ($)'
+                                        },
+                                        grid: {
+                                            color: 'rgba(0, 0, 0, 0.05)'
+                                        }
+                                    },
+                                    x: {
+                                        title: {
+                                            display: true,
+                                            text: 'Month'
+                                        },
+                                        grid: {
+                                            display: false
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
+                                    title: {
+                                        display: false
+                                    },
+                                    tooltip: {
+                                        callbacks: {
+                                            label: function(context) {
+                                                let label = context.dataset.label || '';
+                                                if (label) {
+                                                    label += ': ';
+                                                }
+                                                label += '$' + context.parsed.y.toFixed(2);
+                                                return label;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error loading yearly data:", error);
+                        
+                        // Show error message in the graph container
+                        hideLoading();
+                        if (chartContainer) {
+                            loadingIndicator.innerHTML = `<div style="padding: 20px; color: red;">Failed to load chart: ${error.message}</div>`;
+                            loadingIndicator.style.display = 'flex';
+                        }
+                    });
+            }
         });
     </script>
 </body>

@@ -240,6 +240,32 @@ body {
 }
 
 /* Chart Section */
+/* Chart toggle buttons */
+.view-toggle {
+    display: flex;
+    gap: 10px;
+}
+
+.toggle-btn {
+    background-color: #f5f7fa;
+    border: 1px solid #e2e8f0;
+    color: #718096;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+    background-color: #edf2f7;
+}
+
+.toggle-btn.active {
+    background-color: #1e3a8a;
+    color: white;
+    border-color: #1e3a8a;
+}
 .section-graphs {
     background-color: white;
     border-radius: 10px;
@@ -254,6 +280,16 @@ body {
     margin-top: 20px;
 }
 
+/* Chart title */
+.chart-title {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #4a5568;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+/* Loading indicator (previous styles) */
 .chart-loading {
     display: flex;
     justify-content: center;
@@ -311,6 +347,20 @@ body {
 
     .graph-container {
         height: 300px;
+    }
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .view-toggle {
+        width: 100%;
+    }
+    
+    .toggle-btn {
+        flex: 1;
+        text-align: center;
     }
 }
 

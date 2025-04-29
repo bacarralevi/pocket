@@ -91,6 +91,15 @@ def dashboard(request):
 # New endpoint for chart data
 @login_required
 def dashboard_chart_data(request):
+    view_type = request.GET.get('view', 'monthly')
+    
+    if view_type == 'yearly':
+        return get_yearly_chart_data(request)
+    else:
+        return get_monthly_chart_data(request)
+
+# Monthly chart data (daily breakdown)
+def get_monthly_chart_data(request):
     # Get the current month and year
     current_month = datetime.now().month
     current_year = datetime.now().year
@@ -128,6 +137,48 @@ def dashboard_chart_data(request):
     
     # Return the data as JSON
     return JsonResponse(daily_data, safe=False)
+
+# Yearly chart data (monthly breakdown)
+def get_yearly_chart_data(request):
+    # Get the current year
+    current_year = datetime.now().year
+    
+    # Month names
+    month_names = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ]
+    
+    # Get monthly income and expense data for chart
+    monthly_data = []
+    
+    # Iterate through each month of the year
+    for month in range(1, 13):
+        # Get income for this month
+        month_income = Transaction.objects.filter(
+            user=request.user,
+            type='Income',
+            date__month=month,
+            date__year=current_year
+        ).aggregate(Sum('amount'))['amount__sum'] or 0
+        
+        # Get expenses for this month
+        month_expenses = Transaction.objects.filter(
+            user=request.user,
+            type='Expense',
+            date__month=month,
+            date__year=current_year
+        ).aggregate(Sum('amount'))['amount__sum'] or 0
+        
+        # Add data for this month
+        monthly_data.append({
+            'month': month_names[month-1],
+            'income': float(month_income),
+            'expenses': float(month_expenses)
+        })
+    
+    # Return the data as JSON
+    return JsonResponse(monthly_data, safe=False)
 
 # Transactions View
 @login_required
