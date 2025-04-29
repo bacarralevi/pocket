@@ -82,13 +82,14 @@ def dashboard(request):
     # Pass the data to the template without chart data
     return render(request, 'accounts/dashboard.html', {
         'current_month_name': current_month_name,
+        'current_year': current_year,
         'total_income': total_income,
         'total_expenses': total_expenses,
         'remaining_balance': remaining_balance,
         'days_in_month': num_days,
     })
-
-# New endpoint for chart data
+    
+# Chart data endpoint
 @login_required
 def dashboard_chart_data(request):
     view_type = request.GET.get('view', 'monthly')
@@ -100,19 +101,28 @@ def dashboard_chart_data(request):
 
 # Monthly chart data (daily breakdown)
 def get_monthly_chart_data(request):
-    # Get the current month and year
-    current_month = datetime.now().month
-    current_year = datetime.now().year
+    # Get the requested month and year, defaulting to current if not provided
+    try:
+        month = int(request.GET.get('month', datetime.now().month))
+        year = int(request.GET.get('year', datetime.now().year))
+    except ValueError:
+        # If invalid parameters are provided, use current date
+        month = datetime.now().month
+        year = datetime.now().year
     
-    # Get days in the current month
-    _, num_days = calendar.monthrange(current_year, current_month)
+    # Validate month range
+    if month < 1 or month > 12:
+        month = datetime.now().month
+    
+    # Get days in the selected month
+    _, num_days = calendar.monthrange(year, month)
     
     # Get daily income and expense data for chart
     daily_data = []
     
     # Iterate through each day of the month
     for day in range(1, num_days + 1):
-        current_date = datetime(current_year, current_month, day).date()
+        current_date = datetime(year, month, day).date()
         
         # Get income for this day
         day_income = Transaction.objects.filter(
@@ -140,8 +150,12 @@ def get_monthly_chart_data(request):
 
 # Yearly chart data (monthly breakdown)
 def get_yearly_chart_data(request):
-    # Get the current year
-    current_year = datetime.now().year
+    # Get the requested year, defaulting to current if not provided
+    try:
+        year = int(request.GET.get('year', datetime.now().year))
+    except ValueError:
+        # If invalid parameter is provided, use current year
+        year = datetime.now().year
     
     # Month names
     month_names = [
@@ -159,7 +173,7 @@ def get_yearly_chart_data(request):
             user=request.user,
             type='Income',
             date__month=month,
-            date__year=current_year
+            date__year=year
         ).aggregate(Sum('amount'))['amount__sum'] or 0
         
         # Get expenses for this month
@@ -167,7 +181,7 @@ def get_yearly_chart_data(request):
             user=request.user,
             type='Expense',
             date__month=month,
-            date__year=current_year
+            date__year=year
         ).aggregate(Sum('amount'))['amount__sum'] or 0
         
         # Add data for this month
@@ -179,6 +193,7 @@ def get_yearly_chart_data(request):
     
     # Return the data as JSON
     return JsonResponse(monthly_data, safe=False)
+
 
 # Transactions View
 @login_required

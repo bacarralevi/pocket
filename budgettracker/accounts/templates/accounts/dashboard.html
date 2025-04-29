@@ -119,6 +119,51 @@
                     </div>
                 </div>
 
+                <div class="date-selector">
+                    <!-- Monthly view selectors -->
+                    <div id="monthlySelectors" class="selector-group">
+                        <div class="selector">
+                            <label for="monthSelector">Month:</label>
+                            <select id="monthSelector" class="date-select">
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                        <div class="selector">
+                            <label for="yearSelectorMonthly">Year:</label>
+                            <select id="yearSelectorMonthly" class="date-select">
+                                <option value="{{ current_year|add:'-2' }}">{{ current_year|add:'-2' }}</option>
+                                <option value="{{ current_year|add:'-1' }}">{{ current_year|add:'-1' }}</option>
+                                <option value="{{ current_year }}" selected>{{ current_year }}</option>
+                            </select>
+                        </div>
+                        <button id="updateMonthlyBtn" class="update-btn">Update</button>
+                    </div>
+
+                    <!-- Yearly view selector -->
+                    <div id="yearlySelectors" class="selector-group" style="display: none;">
+                        <div class="selector">
+                            <label for="yearSelectorYearly">Year:</label>
+                            <select id="yearSelectorYearly" class="date-select">
+                                <option value="{{ current_year|add:'-2' }}">{{ current_year|add:'-2' }}</option>
+                                <option value="{{ current_year|add:'-1' }}">{{ current_year|add:'-1' }}</option>
+                                <option value="{{ current_year }}" selected>{{ current_year }}</option>
+                            </select>
+                        </div>
+                        <button id="updateYearlyBtn" class="update-btn">Update</button>
+                    </div>
+                </div>
+
                 <div class="graph-container">
                     <div id="chart-title" class="chart-title">Daily Transactions - {{ current_month_name }}</div>
                     <canvas id="financialChart"></canvas>
@@ -140,6 +185,17 @@
             const yearlyViewBtn = document.getElementById('yearlyViewBtn');
             const chartTitle = document.getElementById('chart-title');
             
+            // Set up selector groups
+            const monthlySelectors = document.getElementById('monthlySelectors');
+            const yearlySelectors = document.getElementById('yearlySelectors');
+            
+            // Set up date selectors
+            const monthSelector = document.getElementById('monthSelector');
+            const yearSelectorMonthly = document.getElementById('yearSelectorMonthly');
+            const yearSelectorYearly = document.getElementById('yearSelectorYearly');
+            const updateMonthlyBtn = document.getElementById('updateMonthlyBtn');
+            const updateYearlyBtn = document.getElementById('updateYearlyBtn');
+            
             // Set up loading indicator
             const chartContainer = document.querySelector('.graph-container');
             const loadingIndicator = document.getElementById('chart-loading');
@@ -147,22 +203,37 @@
             // Chart variable
             let currentChart = null;
             
+            // Set current date as default
+            const currentDate = new Date();
+            monthSelector.value = currentDate.getMonth() + 1; // JavaScript months are 0-indexed
+            
             // Default view
-            loadMonthlyData();
+            loadMonthlyData(monthSelector.value, yearSelectorMonthly.value);
             
             // Add event listeners to toggle buttons
             monthlyViewBtn.addEventListener('click', function() {
                 if (!this.classList.contains('active')) {
                     setActiveButton(monthlyViewBtn);
-                    loadMonthlyData();
+                    setActiveSelectors('monthly');
+                    loadMonthlyData(monthSelector.value, yearSelectorMonthly.value);
                 }
             });
             
             yearlyViewBtn.addEventListener('click', function() {
                 if (!this.classList.contains('active')) {
                     setActiveButton(yearlyViewBtn);
-                    loadYearlyData();
+                    setActiveSelectors('yearly');
+                    loadYearlyData(yearSelectorYearly.value);
                 }
+            });
+            
+            // Add event listeners to update buttons
+            updateMonthlyBtn.addEventListener('click', function() {
+                loadMonthlyData(monthSelector.value, yearSelectorMonthly.value);
+            });
+            
+            updateYearlyBtn.addEventListener('click', function() {
+                loadYearlyData(yearSelectorYearly.value);
             });
             
             function setActiveButton(activeButton) {
@@ -172,6 +243,16 @@
                 });
                 // Add active class to selected button
                 activeButton.classList.add('active');
+            }
+            
+            function setActiveSelectors(view) {
+                if (view === 'monthly') {
+                    monthlySelectors.style.display = 'flex';
+                    yearlySelectors.style.display = 'none';
+                } else {
+                    monthlySelectors.style.display = 'none';
+                    yearlySelectors.style.display = 'flex';
+                }
             }
             
             function showLoading() {
@@ -193,11 +274,20 @@
                 }
             }
             
-            function loadMonthlyData() {
+            function getMonthName(monthNum) {
+                const monthNames = [
+                    'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ];
+                return monthNames[monthNum - 1];
+            }
+            
+            function loadMonthlyData(month, year) {
                 showLoading();
-                chartTitle.textContent = 'Daily Transactions - {{ current_month_name }}';
+                const monthName = getMonthName(month);
+                chartTitle.textContent = `Daily Transactions - ${monthName} ${year}`;
                 
-                fetch('{% url "dashboard_chart_data" %}?view=monthly')
+                fetch(`{% url "dashboard_chart_data" %}?view=monthly&month=${month}&year=${year}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
@@ -299,11 +389,11 @@
                     });
             }
             
-            function loadYearlyData() {
+            function loadYearlyData(year) {
                 showLoading();
-                chartTitle.textContent = 'Monthly Transactions - {{ current_year }}';
+                chartTitle.textContent = `Monthly Transactions - ${year}`;
                 
-                fetch('{% url "dashboard_chart_data" %}?view=yearly')
+                fetch(`{% url "dashboard_chart_data" %}?view=yearly&year=${year}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
