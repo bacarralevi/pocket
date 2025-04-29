@@ -1,15 +1,18 @@
+import calendar
+import json
 from .models import Transaction, Category, Budget
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm # type: ignore
+from django.contrib.auth import login, logout # type: ignore
+from django.contrib.auth.decorators import login_required # type: ignore
+from django.utils.safestring import mark_safe # type: ignore
+from django.db.models import Sum # type: ignore
 from datetime import datetime
 from .forms import BudgetForm
-from django.utils.dateparse import parse_date
+from django.utils.dateparse import parse_date # type: ignore
 from datetime import datetime
 import csv
-from django.http import HttpResponse
+from django.http import HttpResponse # type: ignore
 
 
 # Registration View
@@ -51,32 +54,71 @@ def dashboard(request):
     current_month = datetime.now().month
     current_year = datetime.now().year
     current_month_name = datetime.now().strftime('%B')
-
+    
+    # Get days in the current month
+    _, num_days = calendar.monthrange(current_year, current_month)
+    
     # Calculate total income for the current month
     total_income = Transaction.objects.filter(
         user=request.user,
         type='Income',
         date__month=current_month,
         date__year=current_year
-    ).aggregate(Sum('amount'))['amount__sum'] or 0  # Use 0 if no income
-
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
+    
     # Calculate total expenses for the current month
     total_expenses = Transaction.objects.filter(
         user=request.user,
         type='Expense',
         date__month=current_month,
         date__year=current_year
-    ).aggregate(Sum('amount'))['amount__sum'] or 0  # Use 0 if no expenses
-
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
+    
     # Calculate the remaining balance
     remaining_balance = total_income - total_expenses
-
-    # Pass the totals and remaining balance to the template
+    
+    # Get daily income and expense data for chart
+    daily_data = []
+    
+    # First day of the month
+    start_date = datetime(current_year, current_month, 1).date()
+    
+    # Iterate through each day of the month
+    for day in range(1, num_days + 1):
+        current_date = datetime(current_year, current_month, day).date()
+        
+        # Get income for this day
+        day_income = Transaction.objects.filter(
+            user=request.user,
+            type='Income',
+            date=current_date
+        ).aggregate(Sum('amount'))['amount__sum'] or 0
+        
+        # Get expenses for this day
+        day_expenses = Transaction.objects.filter(
+            user=request.user,
+            type='Expense',
+            date=current_date
+        ).aggregate(Sum('amount'))['amount__sum'] or 0
+        
+        # Add data for this day
+        daily_data.append({
+            'day': day,
+            'income': float(day_income),
+            'expenses': float(day_expenses)
+        })
+    
+    # Convert daily data to JSON for chart
+    chart_data = mark_safe(json.dumps(daily_data))
+    
+    # Pass the data to the template
     return render(request, 'accounts/dashboard.html', {
         'current_month_name': current_month_name,
         'total_income': total_income,
         'total_expenses': total_expenses,
         'remaining_balance': remaining_balance,
+        'chart_data': chart_data,
+        'days_in_month': num_days,
     })
 
 

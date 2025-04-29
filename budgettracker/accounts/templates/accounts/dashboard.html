@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="{% static 'accounts/css/dashboard.css' %}">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js - Correct version -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -46,7 +48,7 @@
                 <div class="financial-cards">
                     <div class="financial-card income">
                         <div class="card-icon">
-                            <i class="fas fa-arrow-down"></i>
+                            <i class="fas fa-arrow-up"></i>
                         </div>
                         <div class="card-content">
                             <h3>Income</h3>
@@ -57,7 +59,7 @@
 
                     <div class="financial-card expenses">
                         <div class="card-icon">
-                            <i class="fas fa-arrow-up"></i>
+                            <i class="fas fa-arrow-down"></i>
                         </div>
                         <div class="card-content">
                             <h3>Expenses</h3>
@@ -107,6 +109,17 @@
                     </a>
                 </div>
             </section>
+
+            <section class="section-graphs">
+                <div class="section-header">
+                    <h2>Daily Transactions - {{ current_month_name }}</h2>
+                </div>
+
+                <div class="graph-container">
+                    <canvas id="dailyChart"></canvas>
+                </div>
+
+            </section>
         </main>
 
         <!-- Footer -->
@@ -114,6 +127,111 @@
             <p>&copy; 2025 Pocket. All rights reserved.</p>
         </footer>
     </div>
+
+    <!-- Store the chart data in a dedicated hidden element to avoid template issues -->
+    <div id="chartDataContainer" data-chart-data='{{ chart_data }}' style="display: none;"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                // Get chart data from the data attribute
+                const dataContainer = document.getElementById('chartDataContainer');
+                const rawChartData = dataContainer.getAttribute('data-chart-data');
+                
+                // Parse the JSON string
+                const chartData = JSON.parse(rawChartData);
+                console.log("Chart data loaded:", chartData);
+                
+                // Prepare arrays for chart
+                const days = chartData.map(item => item.day);
+                const incomeData = chartData.map(item => item.income);
+                const expenseData = chartData.map(item => item.expenses);
+                
+                const ctx = document.getElementById('dailyChart');
+                
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: days,
+                        datasets: [
+                            {
+                                label: 'Income',
+                                data: incomeData,
+                                backgroundColor: 'rgba(72, 187, 120, 0.7)',
+                                borderColor: '#48bb78',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Expenses',
+                                data: expenseData,
+                                backgroundColor: 'rgba(245, 101, 101, 0.7)',
+                                borderColor: '#f56565',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Amount ($)'
+                                },
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Day of Month'
+                                },
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Daily Income and Expenses'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function(tooltipItems) {
+                                        return 'Day ' + tooltipItems[0].label;
+                                    },
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        label += '$' + context.parsed.y.toFixed(2);
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                console.error("Error creating chart:", error);
+                
+                // Add the error message to the graph container so it's visible to users
+                const graphContainer = document.querySelector('.graph-container');
+                if (graphContainer) {
+                    graphContainer.innerHTML += `<div style="padding: 20px; color: red;">Failed to load chart: ${error.message}</div>`;
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

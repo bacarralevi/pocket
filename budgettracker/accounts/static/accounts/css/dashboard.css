@@ -239,6 +239,21 @@ body {
     color: #718096;
 }
 
+/* Chart Section */
+.section-graphs {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    margin-top: 10px;
+}
+
+.graph-container {
+    height: 400px;
+    position: relative;
+    margin-top: 20px;
+}
+
 /* Footer */
 .app-footer {
     background-color: #1e3a8a;
@@ -279,6 +294,10 @@ body {
     .amount {
         font-size: 1.5rem;
     }
+
+    .graph-container {
+        height: 300px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -296,5 +315,9 @@ body {
         width: 50px;
         height: 50px;
         font-size: 1.2rem;
+    }
+
+    .graph-container {
+        height: 250px;
     }
 }
