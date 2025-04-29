@@ -1,18 +1,35 @@
-<!-- accounts/templates/accounts/register.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Register | Your App Name</title>
+    <link rel="stylesheet" href="{% static 'accounts/css/register.css' %}">
 </head>
+
 <body>
-    <h2>Register</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-    <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    <div class="container">
+        <div class="register-card">
+            <div class="register-header">
+                <h1>Create Account</h1>
+                <p class="subtitle">Please fill in your details to register</p>
+            </div>
+
+            <form method="POST" class="register-form">
+                {% csrf_token %}
+                <div class="form-fields">
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="register-button">Sign Up</button>
+            </form>
+
+            <div class="register-footer">
+                <p>Already have an account? <a href="{% url 'login' %}" class="login-link">Login</a></p>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

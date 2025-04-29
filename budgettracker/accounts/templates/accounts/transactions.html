@@ -1,8 +1,8 @@
-<!-- accounts/templates/accounts/transactions.html -->
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Transactions</title>
@@ -19,6 +19,7 @@
         }
     </style>
 </head>
+
 <body>
 
 
@@ -52,6 +53,7 @@
         <button>Add Transaction</button>
     </a>
 
+<<<<<<< HEAD
     <h3>Total Income for the Month: ₱{{ total_income }}</h3>
     <h3>Total Expenses for the Month: ₱{{ total_expenses }}</h3>
     <h4>Remaining Balance: ₱{{ remaining_balance }}</h4>
@@ -105,7 +107,59 @@
     {% else %}
         <p>No transactions yet.</p>
     {% endif %}
+=======
+            <div class="transactions-content">
 
-    <p><a href="{% url 'dashboard' %}">Back to Dashboard</a></p>
+>>>>>>> a5e871db50adf9dd1defef4d9ec7dc02ad960a13
+
+                {% if transactions %}
+                <div class="table-container">
+                    <table class="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Category</th>
+                                <th>Notes</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for transaction in transactions %}
+                            <tr>
+                                <td>{{ transaction.title }}</td>
+                                <td class="amount-cell">{{ transaction.amount }}</td>
+                                <td>{{ transaction.date }}</td>
+                                <td>{{ transaction.type }}</td>
+                                <td>{{ transaction.category.name }}</td>
+                                <td>{{ transaction.notes }}</td>
+                                <td class="actions-cell">
+                                    <a href="{% url 'edit_transaction' transaction.id %}" class="edit-link">Edit</a>
+                                    <a href="{% url 'delete_transaction' transaction.id %}"
+                                        class="delete-link">Delete</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="no-data">
+                    <p>No transactions yet.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="transactions-footer">
+                <a href="{% url 'dashboard' %}" class="back-link">Back to Dashboard</a>
+                <a href="{% url 'create_transaction' %}" class="add-button">
+                    Add Transaction
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

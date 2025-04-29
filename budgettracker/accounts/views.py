@@ -85,6 +85,7 @@ def transactions(request):
     transactions = Transaction.objects.filter(user=user).order_by('-date')
     categories = Category.objects.all()
 
+<<<<<<< HEAD
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
     category_id = request.GET.get('category_id')
@@ -112,6 +113,37 @@ def transactions(request):
         'total_expenses': total_expenses,
         'remaining_balance': remaining_balance,
         'all_categories': categories,
+=======
+    # Get the current month and year
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+
+    # Calculate total income for the current month
+    total_income = Transaction.objects.filter(
+        user=request.user,
+        type='Income',
+        date__month=current_month,
+        date__year=current_year
+    ).aggregate(Sum('amount'))['amount__sum'] or 0  # Use 0 if no income
+
+    # Calculate total expenses for the current month
+    total_expenses = Transaction.objects.filter(
+        user=request.user,
+        type='Expense',
+        date__month=current_month,
+        date__year=current_year
+    ).aggregate(Sum('amount'))['amount__sum'] or 0  # Use 0 if no expenses
+
+    # Calculate the remaining balance
+    remaining_balance = total_income - total_expenses
+
+    return render(request, 'accounts/transactions.html', {
+        'transactions': user_transactions,
+        'total_income': total_income,
+        'total_expenses': total_expenses,
+        'remaining_balance': remaining_balance,
+    
+>>>>>>> a5e871db50adf9dd1defef4d9ec7dc02ad960a13
     })
 
 

@@ -1,18 +1,35 @@
-<!-- accounts/templates/accounts/login.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login | Your App Name</title>
+    <link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
 </head>
+
 <body>
-    <h2>Login</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
-    <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+    <div class="container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Welcome Back</h1>
+                <p class="subtitle">Please enter your credentials to login</p>
+            </div>
+
+            <form method="POST" class="login-form">
+                {% csrf_token %}
+                <div class="form-fields">
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="login-button">Sign In</button>
+            </form>
+
+            <div class="login-footer">
+                <p>Don't have an account? <a href="{% url 'register' %}" class="register-link">Register</a></p>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
