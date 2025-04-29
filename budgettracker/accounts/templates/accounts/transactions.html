@@ -6,6 +6,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Transactions</title>
+    <style>
+        .warning {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .positive {
+            color: green;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <h2>My Transactions</h2>
@@ -13,6 +25,17 @@
     <a href="{% url 'create_transaction' %}">
         <button>Add Transaction</button>
     </a>
+
+    <h3>Total Income for the Month: ₱{{ total_income }}</h3>
+    <h3>Total Expenses for the Month: ₱{{ total_expenses }}</h3>
+    <h4>Remaining Balance: ₱{{ remaining_balance }}</h4>
+
+    <!-- 🚨 Budget Warning Message -->
+    {% if remaining_balance < 0 %}
+        <p class="warning">⚠️ Warning: You have exceeded your monthly budget!</p>
+    {% else %}
+        <p class="positive">✅ You are within your budget.</p>
+    {% endif %}
 
     <br><br>
 

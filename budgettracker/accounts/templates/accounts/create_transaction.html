@@ -27,13 +27,13 @@
 
         <!-- Type (Income or Expense) -->
         <label for="type">Type:</label><br>
-        <select id="type" name="type" required>
+        <select id="type" name="type" required onchange="toggleCategory()">
             <option value="">--Select Type--</option>
             <option value="Income">Income</option>
             <option value="Expense">Expense</option>
         </select><br><br>
 
-            <!-- Category -->
+        <!-- Category -->
         <label for="category">Category:</label><br>
         <select id="category" name="category">
             <option value="">-- Select a Category --</option>
@@ -51,5 +51,23 @@
     </form>
 
     <p><a href="{% url 'transactions' %}">Back to Transactions</a></p>
+
+    <!-- JavaScript to disable category if type is Income -->
+    <script>
+        function toggleCategory() {
+            const typeField = document.getElementById('type');
+            const categoryField = document.getElementById('category');
+
+            if (typeField.value === 'Income') {
+                categoryField.disabled = true;
+                categoryField.value = ''; // reset the selected value
+            } else {
+                categoryField.disabled = false;
+            }
+        }
+
+        // Run on page load in case the form is re-rendered with data
+        window.onload = toggleCategory;
+    </script>
 </body>
 </html>
