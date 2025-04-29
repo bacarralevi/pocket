@@ -1,26 +1,46 @@
-<!-- accounts/templates/accounts/dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Financial Dashboard</title>
     <link rel="stylesheet" href="{% static 'accounts/css/dashboard.css' %}">
 </head>
+
 <body>
-    <h2>Welcome to your dashboard, {{ user.username }}!</h2>
-    <h3>Total Income for the Month: ${{ total_income }}</h3>
-    <h3>Total Expenses for the Month: ${{ total_expenses }}</h3>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h2>Welcome to your dashboard, {{ user.username }}!</h2>
+        </div>
 
+        <div class="financial-summary">
+            <div class="summary-card income-card">
+                <h3>Total Income</h3>
+                <div class="amount">${{ total_income }}</div>
+                <div class="period">This Month</div>
+            </div>
 
-    <h4>Remaining Balance: ${{ remaining_balance }}</h4>
+            <div class="summary-card expense-card">
+                <h3>Total Expenses</h3>
+                <div class="amount">${{ total_expenses }}</div>
+                <div class="period">This Month</div>
+            </div>
 
-    <div>
-        <a href="{% url 'create_transaction' %}">Add New Transaction</a> | 
-        <a href="{% url 'transactions' %}">View My Transactions</a>
+            <div class="summary-card balance-card">
+                <h3>Remaining Balance</h3>
+                <div class="amount">${{ remaining_balance }}</div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{% url 'create_transaction' %}" class="action-button">Add New Transaction</a>
+            <a href="{% url 'transactions' %}" class="action-button">View My Transactions</a>
+        </div>
+
+        <a href="{% url 'logout' %}" class="logout-link">Logout</a>
     </div>
-
-    <p><a href="{% url 'logout' %}">Logout</a></p>
 </body>
+
 </html>
