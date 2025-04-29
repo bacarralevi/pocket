@@ -5,5 +5,5 @@ budgettracker/accounts/__pycache__/
 # Ignore migrations folder
 budgettracker/accounts/migrations/
 db.sqlite3
-budgettracker/budgettracker/db.sqlite3
+budgettracker/db.sqlite3
 myenv/
