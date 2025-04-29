@@ -109,11 +109,10 @@ def transactions(request):
     remaining_balance = total_income - total_expenses
 
     return render(request, 'accounts/transactions.html', {
-        'transactions': user_transactions,
+        'transactions': transactions,  # Changed from user_transactions to transactions
         'total_income': total_income,
         'total_expenses': total_expenses,
         'remaining_balance': remaining_balance,
-    
     })
 
 

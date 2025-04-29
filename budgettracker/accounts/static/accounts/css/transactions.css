@@ -12,70 +12,110 @@ body {
     line-height: 1.6;
 }
 
-/* Container */
-.container {
+/* App Container */
+.app-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     min-height: 100vh;
-    padding: 20px;
-}
-
-/* Transactions card */
-.transactions-card {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 1000px;
-    overflow: hidden;
 }
 
 /* Header */
-.transactions-header {
+.app-header {
     background-color: #1e3a8a;
     color: white;
-    padding: 20px 30px;
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-.transactions-header h1 {
-    font-size: 24px;
-    font-weight: 600;
-}
-
-/* Content */
-.transactions-content {
-    padding: 30px;
-}
-
-/* Actions bar */
-.actions-bar {
+.header-content {
     display: flex;
-    justify-content: flex-start;
-    margin-bottom: 25px;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
-.add-button {
-    display: inline-block;
-    background-color: #1e3a8a;
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-info i {
+    font-size: 1.5rem;
+}
+
+.app-logo h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+}
+
+.logout-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     color: white;
     text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-weight: 500;
+    padding: 8px 15px;
+    border-radius: 6px;
     transition: background-color 0.3s;
 }
 
-.add-button:hover {
-    background-color: #2d4ba0;
+.logout-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Table styles */
+/* Transactions Content */
+.transactions-content {
+    flex: 1;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.transactions-container {
+    width: 100%;
+}
+
+.transactions-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.transactions-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.transactions-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.transactions-body {
+    padding: 20px 25px;
+}
+
+/* Table Container */
 .table-container {
     overflow-x: auto;
-    margin-bottom: 20px;
 }
 
+/* Transactions Table */
 .transactions-table {
     width: 100%;
     border-collapse: collapse;
@@ -84,10 +124,10 @@ body {
 
 .transactions-table th {
     background-color: #f1f5f9;
-    padding: 12px 15px;
-    font-weight: 600;
     color: #475569;
-    border-bottom: 2px solid #e2e8f0;
+    font-weight: 600;
+    padding: 12px 15px;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .transactions-table td {
@@ -99,104 +139,158 @@ body {
     background-color: #f8fafc;
 }
 
+/* Amount Cell */
 .amount-cell {
-    font-weight: 500;
+    font-weight: 600;
 }
 
-/* Table actions */
+.income-amount {
+    color: #48bb78;
+}
+
+.expense-amount {
+    color: #f56565;
+}
+
+/* Actions Cell */
 .actions-cell {
-    white-space: nowrap;
+    display: flex;
+    gap: 10px;
 }
 
 .edit-link,
 .delete-link {
-    display: inline-block;
-    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
     border-radius: 4px;
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    margin-right: 5px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
 }
 
 .edit-link {
-    background-color: #e2e8f0;
-    color: #475569;
+    background-color: rgba(66, 153, 225, 0.1);
+    color: #4299e1;
 }
 
 .edit-link:hover {
-    background-color: #cbd5e1;
+    background-color: rgba(66, 153, 225, 0.2);
 }
 
 .delete-link {
-    background-color: #fee2e2;
-    color: #ef4444;
+    background-color: rgba(245, 101, 101, 0.1);
+    color: #f56565;
 }
 
 .delete-link:hover {
-    background-color: #fecaca;
+    background-color: rgba(245, 101, 101, 0.2);
 }
 
-/* No data message */
+/* No Data Message */
 .no-data {
     text-align: center;
-    padding: 30px;
-    color: #64748b;
-    font-size: 16px;
+    padding: 40px 0;
+    color: #718096;
 }
 
-/* Footer */
-.transactions-footer {
-    padding: 20px 30px;
-    border-top: 1px solid #e2e8f0;
-    text-align: left;
-    width: 100%;
+/* Transactions Actions */
+.transactions-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1rem;
+    padding: 20px 25px;
+    background-color: #f8fafc;
+    border-top: 1px solid #e2e8f0;
 }
 
 .back-link {
-    color: #1e3a8a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #718096;
     text-decoration: none;
-    font-weight: 500;
     transition: color 0.3s;
 }
 
 .back-link:hover {
-    text-decoration: underline;
+    color: #4a5568;
 }
 
-/* Responsive adjustments */
+.add-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #1e3a8a;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.add-button:hover {
+    background-color: #2d4ba0;
+}
+
+/* Footer */
+.app-footer {
+    background-color: #1e3a8a;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 15px;
+    font-size: 0.9rem;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-    .transactions-card {
-        border-radius: 0;
-        box-shadow: none;
+    .header-content {
+        padding: 0 15px;
     }
 
-    .container {
-        padding: 0;
+    .app-logo h1 {
+        font-size: 1.5rem;
+    }
+
+    .logout-button span {
+        display: none;
     }
 
     .transactions-content {
-        padding: 20px;
+        padding: 20px 15px;
+    }
+
+    .transactions-header,
+    .transactions-body,
+    .transactions-actions {
+        padding: 15px;
     }
 
     .transactions-table th,
     .transactions-table td {
         padding: 10px;
     }
+
+    .actions-cell {
+        flex-direction: column;
+        gap: 5px;
+    }
 }
 
 @media (max-width: 480px) {
-    .actions-cell {
-        display: flex;
-        flex-direction: column;
+    .user-info span {
+        display: none;
     }
 
-    .edit-link,
-    .delete-link {
-        margin-bottom: 5px;
+    .transactions-actions {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .add-button {
+        width: 100%;
+        justify-content: center;
     }
 }

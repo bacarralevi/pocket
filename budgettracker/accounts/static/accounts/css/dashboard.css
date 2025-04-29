@@ -1,17 +1,4 @@
-/* Base styles and variables */
-:root {
-    --primary-blue: #1a365d;
-    --secondary-blue: #2c5282;
-    --light-blue: #4299e1;
-    --accent-blue: #3182ce;
-    --white: #ffffff;
-    --light-gray: #f7fafc;
-    --gray: #e2e8f0;
-    --text-dark: #2d3748;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --border-radius: 8px;
-}
-
+/* Reset and base styles */
 * {
     margin: 0;
     padding: 0;
@@ -20,133 +7,294 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--light-gray);
-    color: var(--text-dark);
+    background-color: #f5f7fa;
+    color: #333;
     line-height: 1.6;
-    padding: 0;
-    margin: 0;
 }
 
-/* Dashboard container */
-.dashboard-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-/* Header styles */
-.dashboard-header {
-    background-color: var(--primary-blue);
-    color: var(--white);
-    padding: 1.5rem 2rem;
-    border-radius: var(--border-radius);
-    margin-bottom: 2rem;
-    box-shadow: var(--shadow);
-}
-
-.dashboard-header h2 {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
-}
-
-/* Financial summary cards */
-.financial-summary {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.summary-card {
-    background-color: var(--white);
-    border-radius: var(--border-radius);
-    padding: 1.5rem;
-    box-shadow: var(--shadow);
-    transition: transform 0.3s ease;
-}
-
-.summary-card:hover {
-    transform: translateY(-5px);
-}
-
-.summary-card h3 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    color: var(--primary-blue);
-}
-
-.summary-card .amount {
-    font-size: 1.8rem;
-    font-weight: bold;
-}
-
-.income-card {
-    border-top: 4px solid #38a169;
-    /* Green for income */
-}
-
-.expense-card {
-    border-top: 4px solid #e53e3e;
-    /* Red for expenses */
-}
-
-.balance-card {
-    border-top: 4px solid var(--accent-blue);
-}
-
-/* Action buttons */
-.action-buttons {
+/* App Container */
+.app-container {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.action-button {
-    background-color: var(--primary-blue);
-    color: var(--white);
-    padding: 0.8rem 1.5rem;
-    border-radius: var(--border-radius);
+/* Header */
+.app-header {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-info i {
+    font-size: 1.5rem;
+}
+
+.app-logo h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+}
+
+.logout-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
     text-decoration: none;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-    display: inline-block;
+    padding: 8px 15px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
 }
 
-.action-button:hover {
-    background-color: var(--secondary-blue);
+.logout-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Logout link */
-.logout-link {
-    display: inline-block;
-    margin-top: 1.5rem;
-    color: var(--primary-blue);
+/* Main Content */
+.dashboard-content {
+    flex: 1;
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.current-month {
+    font-size: 1rem;
+    color: #718096;
+}
+
+/* Financial Cards */
+.financial-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.financial-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.financial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.income .card-icon {
+    background-color: rgba(72, 187, 120, 0.1);
+    color: #48bb78;
+}
+
+.expenses .card-icon {
+    background-color: rgba(245, 101, 101, 0.1);
+    color: #f56565;
+}
+
+.balance .card-icon {
+    background-color: rgba(66, 153, 225, 0.1);
+    color: #4299e1;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-content h3 {
+    font-size: 1rem;
+    color: #718096;
+    margin-bottom: 5px;
+}
+
+.amount {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.income .amount {
+    color: #48bb78;
+}
+
+.expenses .amount {
+    color: #f56565;
+}
+
+.balance .amount {
+    color: #4299e1;
+}
+
+.period {
+    font-size: 0.9rem;
+    color: #a0aec0;
+}
+
+/* Action Cards */
+.action-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.action-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
     text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
+    color: inherit;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.logout-link:hover {
-    color: var(--accent-blue);
-    text-decoration: underline;
+.action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive adjustments */
+.action-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(30, 58, 138, 0.1);
+    color: #1e3a8a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.action-text {
+    flex: 1;
+}
+
+.action-text h3 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: #2d3748;
+}
+
+.action-text p {
+    font-size: 0.9rem;
+    color: #718096;
+}
+
+/* Footer */
+.app-footer {
+    background-color: #1e3a8a;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 15px;
+    font-size: 0.9rem;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-    .dashboard-container {
-        padding: 1rem;
+    .header-content {
+        padding: 0 15px;
     }
-
-    .financial-summary {
+    
+    .app-logo h1 {
+        font-size: 1.5rem;
+    }
+    
+    .logout-button span {
+        display: none;
+    }
+    
+    .dashboard-content {
+        padding: 20px 15px;
+    }
+    
+    .financial-cards, 
+    .action-cards {
         grid-template-columns: 1fr;
     }
-
-    .dashboard-header {
-        padding: 1rem 1.5rem;
+    
+    .financial-card, 
+    .action-card {
+        padding: 20px;
     }
-
-    .dashboard-header h2 {
+    
+    .amount {
         font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-info span {
+        display: none;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .card-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
     }
 }

@@ -7,105 +7,132 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Transaction</title>
     <link rel="stylesheet" href="{% static 'accounts/css/create_transaction.css' %}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-    <div class="transaction-container">
-        <div class="transaction-header">
-            <h2>Add a New Transaction</h2>
-        </div>
+    <div class="app-container">
+        <!-- Header/Navigation -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>{{ user.username }}</span>
+                </div>
 
-        <form method="POST" class="transaction-form">
-            {% csrf_token %}
+                <div class="app-logo">
+                    <h1>Add Transaction</h1>
+                </div>
 
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" id="title" name="title" required>
+                <div class="header-actions">
+                    <a href="{% url 'logout' %}" class="logout-button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
             </div>
+        </header>
 
-            <div class="form-group">
-                <label for="amount">Amount</label>
-                <input type="number" id="amount" name="amount" step="0.01" required>
+        <!-- Main Content -->
+        <main class="form-content">
+            <div class="form-container">
+                <div class="form-card">
+                    <div class="form-header">
+                        <h2>Add a New Transaction</h2>
+                    </div>
+
+                    <form method="POST" class="transaction-form">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" id="title" name="title" placeholder="Enter transaction title" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <div class="amount-input-wrapper">
+                                <span class="currency-symbol">$</span>
+                                <input type="number" id="amount" name="amount" step="0.01" placeholder="0.00" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" name="date" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="type">Type</label>
+                            <select id="type" name="type" required onchange="toggleCategory()">
+                                <option value="">--Select Type--</option>
+                                <option value="Income">Income</option>
+                                <option value="Expense">Expense</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category" name="category">
+                                <option value="">-- Select a Category --</option>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">Notes (optional)</label>
+                            <textarea id="notes" name="notes" placeholder="Add any additional details here"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <a href="{% url 'transactions' %}" class="cancel-button">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                            <button type="submit" class="save-button">
+                                <i class="fas fa-save"></i> Save Transaction
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
+        </main>
 
-            <div class="form-group">
-                <label for="date">Date</label>
-                <input type="date" id="date" name="date" required>
-            </div>
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>&copy; 2025 Pocket. All rights reserved.</p>
+        </footer>
+    </div>
 
-            <div class="form-group">
-                <label for="type">Type</label>
-                <select id="type" name="type" required>
-                    <option value="">--Select Type--</option>
-                    <option value="Income">Income</option>
-                    <option value="Expense">Expense</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="category">Category</label>
-                <select id="category" name="category">
-                    <option value="">-- Select a Category --</option>
-                    {% for category in categories %}
-                    <option value="{{ category.id }}">{{ category.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="notes">Notes (optional)</label>
-                <textarea id="notes" name="notes"></textarea>
-            </div>
-
-<<<<<<< HEAD
-    <p><a href="{% url 'transactions' %}">Back to Transactions</a></p>
-
-    <!-- JavaScript to disable category if type is Income -->
     <script>
         function toggleCategory() {
             const typeField = document.getElementById('type');
             const categoryField = document.getElementById('category');
+            const amountInput = document.querySelector('.amount-input-wrapper');
+
+            // Reset classes
+            amountInput.classList.remove('income', 'expense');
 
             if (typeField.value === 'Income') {
                 categoryField.disabled = true;
-                categoryField.value = ''; // reset the selected value
-            } else {
+                categoryField.value = '';
+                amountInput.classList.add('income');
+            } else if (typeField.value === 'Expense') {
                 categoryField.disabled = false;
+                amountInput.classList.add('expense');
             }
         }
 
-        // Run on page load in case the form is re-rendered with data
-        window.onload = toggleCategory;
-<<<<<<< HEAD
-=======
-=======
-            <div class="button-group">
-                <button type="submit">Save Transaction</button>
-            </div>
-        </form>
+        // Set today's date as default
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
 
-        <a href="{% url 'transactions' %}" class="back-link">Back to Transactions</a>
-    </div>
-
-    <script>
-        // Optional: Add dynamic styling based on transaction type selection
-        document.getElementById('type').addEventListener('change', function () {
-            const formGroups = document.querySelectorAll('.form-group');
-
-            // Remove any existing type classes
-            formGroups.forEach(group => {
-                group.classList.remove('type-income', 'type-expense');
-            });
-
-            // Add appropriate class based on selection
-            if (this.value === 'Income') {
-                document.querySelector('.form-group:nth-child(2)').classList.add('type-income');
-            } else if (this.value === 'Expense') {
-                document.querySelector('.form-group:nth-child(2)').classList.add('type-expense');
-            }
+            // Run category toggle on page load
+            toggleCategory();
         });
->>>>>>> 2cfbe49db9495d381bbf7477c93c166ddeb0eda3
->>>>>>> a5e871db50adf9dd1defef4d9ec7dc02ad960a13
     </script>
 </body>
 

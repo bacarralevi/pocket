@@ -5,39 +5,114 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <style>
-        .warning {
-            color: red;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .positive {
-            color: green;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-    </style>
+    <title>Pocket - Financial Dashboard</title>
+    <link rel="stylesheet" href="{% static 'accounts/css/dashboard.css' %}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-    <h2>Welcome to your dashboard, {{ user.username }}!</h2>
-    <h3>Total Income for the Month: ${{ total_income }}</h3>
-    <h3>Total Expenses for the Month: ${{ total_expenses }}</h3>
+    <div class="app-container">
+        <!-- Header/Navigation -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>{{ user.username }}</span>
+                </div>
 
+                <div class="app-logo">
+                    <h1>Pocket</h1>
+                </div>
 
-    <h4>Remaining Balance: ${{ remaining_balance }}</h4>
+                <div class="header-actions">
+                    <a href="{% url 'logout' %}" class="logout-button">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+        </header>
 
-        <!-- 🚨 Budget Warning Message -->
-    {% if remaining_balance < 0 %}
-        <p class="warning">⚠️ Warning: You have exceeded your monthly budget!</p>
-    {% else %}
-        <p class="positive">✅ You are within your budget.</p>
-    {% endif %}
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <!-- Financial Overview Section -->
+            <section class="section-financial-overview">
+                <div class="section-header">
+                    <h2>Financial Overview</h2>
+                    <span class="current-month">{{ current_month }}</span>
+                </div>
 
-    <div>
-        <a href="{% url 'create_transaction' %}">Add New Transaction</a> | 
-        <a href="{% url 'transactions' %}">View My Transactions</a>
+                <div class="financial-cards">
+                    <div class="financial-card income">
+                        <div class="card-icon">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Income</h3>
+                            <div class="amount">${{ total_income }}</div>
+                            <div class="period">This Month</div>
+                        </div>
+                    </div>
+
+                    <div class="financial-card expenses">
+                        <div class="card-icon">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Expenses</h3>
+                            <div class="amount">${{ total_expenses }}</div>
+                            <div class="period">This Month</div>
+                        </div>
+                    </div>
+
+                    <div class="financial-card balance">
+                        <div class="card-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Balance</h3>
+                            <div class="amount">${{ remaining_balance }}</div>
+                            <div class="period">Remaining</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions Section -->
+            <section class="section-quick-actions">
+                <div class="section-header">
+                    <h2>Quick Actions</h2>
+                </div>
+
+                <div class="action-cards">
+                    <a href="{% url 'create_transaction' %}" class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <div class="action-text">
+                            <h3>Add Transaction</h3>
+                            <p>Record a new income or expense</p>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'transactions' %}" class="action-card">
+                        <div class="action-icon">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <div class="action-text">
+                            <h3>View Transactions</h3>
+                            <p>See all your financial activities</p>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>&copy; 2025 Pocket. All rights reserved.</p>
+        </footer>
     </div>
 </body>
 
