@@ -296,6 +296,8 @@ body {
     color: #718096;
 }
 
+
+
 /* Transactions Actions */
 .transactions-actions {
     display: flex;
@@ -371,6 +373,116 @@ body {
     font-size: 0.9rem;
 }
 
+/* Budget Warnings Styling */
+.budget-warnings-section {
+    margin-bottom: 20px;
+    background-color: #fff8f1;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.budget-warnings-section .section-header {
+    background-color: #f0f0f0;
+    padding: 12px 15px;
+    color: #4a5568;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.budget-warnings-section .section-header h3 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+.budget-warnings-section .section-header i {
+    margin-right: 8px;
+    color: #ed8936;
+}
+
+.warnings-container {
+    padding: 15px;
+}
+
+.budget-warning-item {
+    display: flex;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    background-color: #fff;
+    border-left: 4px solid #ed8936;
+}
+
+.budget-warning-item.warning-exceeded {
+    border-left-color: #f56565;
+    background-color: #fff5f5;
+}
+
+.budget-warning-item.warning-close {
+    border-left-color: #ed8936;
+    background-color: #fffaf0;
+}
+
+.warning-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-size: 1.2rem;
+}
+
+.warning-exceeded .warning-icon {
+    color: #f56565;
+}
+
+.warning-close .warning-icon {
+    color: #ed8936;
+}
+
+.warning-content {
+    flex: 1;
+}
+
+.warning-title {
+    font-weight: 500;
+    margin-bottom: 3px;
+    color: #4a5568;
+}
+
+.warning-details {
+    font-size: 0.9rem;
+    color: #718096;
+}
+
+.warning-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.warning-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #e2e8f0;
+    color: #4a5568;
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.warning-action-btn:hover {
+    background-color: #cbd5e0;
+}
+
+.warning-action-btn i {
+    font-size: 0.9rem;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .header-content {
@@ -402,116 +514,6 @@ body {
     .reset-button {
         width: 100%;
         justify-content: center;
-    }
-
-        /* Budget Warnings Styling */
-    .budget-warnings-section {
-        margin-bottom: 20px;
-        background-color: #fff8f1;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-
-    .budget-warnings-section .section-header {
-        background-color: #f0f0f0;
-        padding: 12px 15px;
-        color: #4a5568;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-    }
-
-    .budget-warnings-section .section-header h3 {
-        font-size: 1rem;
-        margin: 0;
-    }
-
-    .budget-warnings-section .section-header i {
-        margin-right: 8px;
-        color: #ed8936;
-    }
-
-    .warnings-container {
-        padding: 15px;
-    }
-
-    .budget-warning-item {
-        display: flex;
-        padding: 12px;
-        margin-bottom: 10px;
-        border-radius: 6px;
-        background-color: #fff;
-        border-left: 4px solid #ed8936;
-    }
-
-    .budget-warning-item.warning-exceeded {
-        border-left-color: #f56565;
-        background-color: #fff5f5;
-    }
-
-    .budget-warning-item.warning-close {
-        border-left-color: #ed8936;
-        background-color: #fffaf0;
-    }
-
-    .warning-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 12px;
-        font-size: 1.2rem;
-    }
-
-    .warning-exceeded .warning-icon {
-        color: #f56565;
-    }
-
-    .warning-close .warning-icon {
-        color: #ed8936;
-    }
-
-    .warning-content {
-        flex: 1;
-    }
-
-    .warning-title {
-        font-weight: 500;
-        margin-bottom: 3px;
-        color: #4a5568;
-    }
-
-    .warning-details {
-        font-size: 0.9rem;
-        color: #718096;
-    }
-
-    .warning-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-        margin-top: 10px;
-    }
-
-    .warning-action-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background-color: #e2e8f0;
-        color: #4a5568;
-        font-size: 0.85rem;
-        padding: 6px 12px;
-        border-radius: 4px;
-        text-decoration: none;
-        transition: background-color 0.2s;
-    }
-
-    .warning-action-btn:hover {
-        background-color: #cbd5e0;
-    }
-
-    .warning-action-btn i {
-        font-size: 0.9rem;
     }
 
     .warning-actions {

@@ -1,8 +1,8 @@
-// budget-charts.js - Add this to your static/accounts/js/ directory
+// budget-charts.js - Updated version for card layout
 
 document.addEventListener('DOMContentLoaded', function() {
     // Function to create a budget progress chart
-    function createBudgetChart(canvasId, spent, total, status) {
+    function createBudgetChart(canvasId, spent, total, status, options = {}) {
         const canvas = document.getElementById(canvasId);
         
         if (!canvas) return; // Skip if canvas doesn't exist
@@ -28,6 +28,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 remainingColor = '#c6f6d5';
         }
         
+        // Default options
+        const defaultOptions = {
+            cutout: '75%',      // Doughnut thickness
+            showPercentage: true, // Show percentage in center
+            fontSize: 1.0,      // Font size multiplier
+            rotation: -90,      // Start from top
+            showText: true      // Whether to show text in the center
+        };
+        
+        // Merge provided options with defaults
+        const chartOptions = {...defaultOptions, ...options};
+        
         // Create chart
         new Chart(canvas, {
             type: 'doughnut',
@@ -36,12 +48,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     data: [percentage, 100 - percentage],
                     backgroundColor: [progressColor, remainingColor],
                     borderWidth: 0,
-                    cutout: '80%' // Make the doughnut thinner
+                    cutout: chartOptions.cutout
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                circumference: 360,
+                rotation: chartOptions.rotation,
                 plugins: {
                     tooltip: {
                         enabled: false
@@ -52,12 +66,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 animation: {
                     animateRotate: true,
-                    animateScale: true
+                    animateScale: true,
+                    duration: 1000
                 }
             },
-            plugins: [{
+            plugins: chartOptions.showText ? [{
                 id: 'centerText',
                 beforeDraw: function(chart) {
+                    if (!chartOptions.showPercentage) return;
+                    
                     const width = chart.width;
                     const height = chart.height;
                     const ctx = chart.ctx;
@@ -65,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ctx.restore();
                     
                     // Display percentage in the center
-                    const fontSize = (height / 100).toFixed(2);
+                    const fontSize = (height / 110 * chartOptions.fontSize).toFixed(2);
                     ctx.font = fontSize + 'em sans-serif';
                     ctx.textBaseline = 'middle';
                     ctx.fillStyle = status === 'exceeded' ? '#f56565' : (status === 'warning' ? '#ed8936' : '#4a5568');
@@ -77,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ctx.fillText(text, textX, textY);
                     ctx.save();
                 }
-            }]
+            }] : []
         });
     }
     
@@ -88,7 +105,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const total = parseFloat(overallBudgetCanvas.getAttribute('data-total'));
         const status = overallBudgetCanvas.getAttribute('data-status');
         
-        createBudgetChart('overallBudgetChart', spent, total, status);
+        createBudgetChart('overallBudgetChart', spent, total, status, {
+            cutout: '70%',
+            fontSize: 1.4
+        });
     }
     
     // Create charts for each category budget
@@ -97,6 +117,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const total = parseFloat(canvas.getAttribute('data-total'));
         const status = canvas.getAttribute('data-status');
         
-        createBudgetChart(canvas.id, spent, total, status);
+        createBudgetChart(canvas.id, spent, total, status, {
+            cutout: '75%',
+            fontSize: 0.9
+        });
     });
 });
