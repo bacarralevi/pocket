@@ -429,7 +429,19 @@ def transactions(request):
 # Create Transaction View
 @login_required
 def create_transaction(request):
-    categories = Category.objects.all()
+    # Get all categories and order them so that "Others..." appears last
+    regular_categories = Category.objects.exclude(name="Others...").order_by('name')
+    others_category = Category.objects.filter(name="Others...").first()
+    
+    # Combine the querysets
+    if others_category:
+        # Convert querysets to lists for manipulation
+        categories_list = list(regular_categories)
+        # Append "Others..." category at the end
+        categories_list.append(others_category)
+        categories = categories_list
+    else:
+        categories = regular_categories
     
     if request.method == 'POST':
         title = request.POST.get('title')
@@ -460,6 +472,20 @@ def create_transaction(request):
 @login_required
 def edit_transaction(request, transaction_id):
     transaction = Transaction.objects.get(id=transaction_id, user=request.user)
+    
+    # Get all categories and order them so that "Others..." appears last
+    regular_categories = Category.objects.exclude(name="Others...").order_by('name')
+    others_category = Category.objects.filter(name="Others...").first()
+    
+    # Combine the querysets
+    if others_category:
+        # Convert querysets to lists for manipulation
+        categories_list = list(regular_categories)
+        # Append "Others..." category at the end
+        categories_list.append(others_category)
+        categories = categories_list
+    else:
+        categories = regular_categories
 
     if request.method == 'POST':
         transaction.title = request.POST.get('title')
@@ -467,12 +493,18 @@ def edit_transaction(request, transaction_id):
         transaction.date = request.POST.get('date')
         transaction.type = request.POST.get('type')
         transaction.notes = request.POST.get('notes')
+        
+        category_id = request.POST.get('category')
+        transaction.category = Category.objects.get(id=category_id) if category_id else None
+            
         transaction.save()
 
         return redirect('transactions')
 
-    return render(request, 'accounts/edit_transaction.html', {'transaction': transaction})
-
+    return render(request, 'accounts/edit_transaction.html', {
+        'transaction': transaction,
+        'categories': categories
+    })
 
 # Delete Transaction View
 @login_required
