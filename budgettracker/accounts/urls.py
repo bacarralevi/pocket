@@ -1,8 +1,6 @@
-# accounts/urls.py
 
-from django.urls import path #type: ignore
+from django.urls import path
 from . import views
-from .views import set_budget
 
 urlpatterns = [
     # Authentication URLs
@@ -20,9 +18,10 @@ urlpatterns = [
     path('transactions/create/', views.create_transaction, name='create_transaction'),
     path('transactions/edit/<int:transaction_id>/', views.edit_transaction, name='edit_transaction'),
     path('transactions/delete/<int:transaction_id>/', views.delete_transaction, name='delete_transaction'),
-    
+    path('export_csv/', views.export_transactions_csv, name='export_transactions_csv'),
     
     # Budget URLs
-    path('set-budget/', views.set_budget, name='set_budget'),
-    path('export_csv/', views.export_transactions_csv, name='export_transactions_csv'),
+    path('budget/', views.set_budget, name='set_budget'),
+    path('budget/edit/<int:budget_id>/', views.edit_budget, name='edit_budget'),
+    path('budget/delete/<int:budget_id>/', views.delete_budget, name='delete_budget'),
 ]

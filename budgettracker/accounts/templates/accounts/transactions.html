@@ -86,7 +86,54 @@
                             </div>
                         </form>
                     </div>
-
+                    <!-- Add this section in transactions.html after the search section and before the transactions body -->
+                    {% if budget_warnings %}
+                    <div class="budget-warnings-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-exclamation-triangle"></i> Budget Alerts</h3>
+                        </div>
+                        <div class="warnings-container">
+                            {% for warning in budget_warnings %}
+                            <div class="budget-warning-item {% if warning.status == 'exceeded' %}warning-exceeded{% elif warning.status == 'warning' %}warning-close{% endif %}">
+                                <div class="warning-icon">
+                                    {% if warning.status == 'exceeded' %}
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    {% else %}
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="warning-content">
+                                    <div class="warning-title">
+                                        {% if warning.type == 'overall' %}
+                                        <strong>Overall Budget</strong>: 
+                                        {% else %}
+                                        <strong>{{ warning.category }}</strong>: 
+                                        {% endif %}
+                                        
+                                        {% if warning.status == 'exceeded' %}
+                                        You've exceeded your budget!
+                                        {% else %}
+                                        You're approaching your budget limit.
+                                        {% endif %}
+                                    </div>
+                                    <div class="warning-details">
+                                        Spent ${{ warning.spent|floatformat:2 }} of ${{ warning.amount|floatformat:2 }} 
+                                        ({{ warning.percentage|floatformat:0 }}%)
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <div class="warning-actions">
+                                <a href="{% url 'dashboard' %}" class="warning-action-btn">
+                                    <i class="fas fa-chart-pie"></i> View Budget
+                                </a>
+                                <a href="{% url 'set_budget' %}" class="warning-action-btn">
+                                    <i class="fas fa-edit"></i> Adjust Budget
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
                     <div class="transactions-body">
                         {% if transactions %}
                         <div class="table-container">
