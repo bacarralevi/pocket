@@ -15,6 +15,8 @@ from django.utils.dateparse import parse_date # type: ignore
 from datetime import datetime
 import csv
 from django.http import HttpResponse # type: ignore
+from django.shortcuts import get_object_or_404  # type: ignore
+from django.contrib import messages # type: ignore
 
 
 # Registration View
@@ -49,7 +51,7 @@ def logout_view(request):
     return redirect('login')
 
 
-# Dashboard View
+# Update the dashboard view to include budget information
 @login_required
 def dashboard(request):
     # Get the current month and year
@@ -79,7 +81,70 @@ def dashboard(request):
     # Calculate the remaining balance
     remaining_balance = total_income - total_expenses
     
-    # Pass the data to the template without chart data
+    # Get budget information
+    current_month_start = datetime(current_year, current_month, 1).date()
+    
+    # Get overall budget if it exists
+    overall_budget = Budget.objects.filter(
+        user=request.user,
+        month__year=current_year,
+        month__month=current_month,
+        category__isnull=True
+    ).first()
+    
+    # Get category budgets
+    category_budgets = Budget.objects.filter(
+        user=request.user,
+        month__year=current_year,
+        month__month=current_month,
+        category__isnull=False
+    ).select_related('category')
+    
+    # Get expense by category for the current month
+    expenses_by_category = Transaction.objects.filter(
+        user=request.user,
+        type='Expense',
+        date__month=current_month,
+        date__year=current_year
+    ).values('category').annotate(total=Sum('amount'))
+    
+    # Convert to a dictionary for easier lookup
+    category_expenses = {}
+    for expense in expenses_by_category:
+        category_id = expense['category']
+        if category_id:  # Skip None categories
+            category_expenses[category_id] = expense['total']
+    
+    # Calculate budget status
+    budget_status = {
+        'has_budget': bool(overall_budget or category_budgets),
+        'overall': {
+            'amount': overall_budget.amount if overall_budget else 0,
+            'spent': total_expenses,
+            'remaining': (overall_budget.amount - total_expenses) if overall_budget else 0,
+            'percentage': (total_expenses / overall_budget.amount * 100) if overall_budget and overall_budget.amount > 0 else 0,
+            'status': get_budget_status(total_expenses, overall_budget.amount if overall_budget else 0)
+        },
+        'categories': []
+    }
+    
+    # Process category budgets
+    for budget in category_budgets:
+        spent = category_expenses.get(budget.category.id, 0)
+        remaining = budget.amount - spent
+        percentage = (spent / budget.amount * 100) if budget.amount > 0 else 0
+        status = get_budget_status(spent, budget.amount)
+        
+        budget_status['categories'].append({
+            'name': budget.category.name,
+            'amount': budget.amount,
+            'spent': spent,
+            'remaining': remaining,
+            'percentage': percentage,
+            'status': status
+        })
+    
+    # Pass the data to the template
     return render(request, 'accounts/dashboard.html', {
         'current_month_name': current_month_name,
         'current_year': current_year,
@@ -87,6 +152,7 @@ def dashboard(request):
         'total_expenses': total_expenses,
         'remaining_balance': remaining_balance,
         'days_in_month': num_days,
+        'budget_status': budget_status
     })
     
 # Chart data endpoint
@@ -242,7 +308,7 @@ def category_chart_data(request):
     # Return the data as JSON
     return JsonResponse(category_data, safe=False)
 
-# Transactions View
+# Updated transactions view with budget warnings
 @login_required
 def transactions(request):
     user = request.user
@@ -276,6 +342,79 @@ def transactions(request):
     # Order by date, newest first
     transactions = transactions.order_by('-date')
     
+    # Get current month budget warnings
+    budget_warnings = []
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+    
+    # Get total expenses for the current month
+    total_expenses = Transaction.objects.filter(
+        user=user,
+        type='Expense',
+        date__month=current_month,
+        date__year=current_year
+    ).aggregate(Sum('amount'))['amount__sum'] or 0
+    
+    # Check overall budget
+    overall_budget = Budget.objects.filter(
+        user=user,
+        month__year=current_year,
+        month__month=current_month,
+        category__isnull=True
+    ).first()
+    
+    if overall_budget:
+        percentage = (total_expenses / overall_budget.amount * 100) if overall_budget.amount > 0 else 0
+        status = get_budget_status(total_expenses, overall_budget.amount)
+        
+        if status in ['warning', 'exceeded']:
+            budget_warnings.append({
+                'type': 'overall',
+                'amount': overall_budget.amount,
+                'spent': total_expenses,
+                'percentage': percentage,
+                'status': status
+            })
+    
+    # Check category budgets
+    category_budgets = Budget.objects.filter(
+        user=user,
+        month__year=current_year,
+        month__month=current_month,
+        category__isnull=False
+    ).select_related('category')
+    
+    # Get expense by category for the current month
+    expenses_by_category = Transaction.objects.filter(
+        user=user,
+        type='Expense',
+        date__month=current_month,
+        date__year=current_year
+    ).values('category').annotate(total=Sum('amount'))
+    
+    # Convert to a dictionary for easier lookup
+    category_expenses = {}
+    for expense in expenses_by_category:
+        category_id = expense['category']
+        if category_id:  # Skip None categories
+            category_expenses[category_id] = expense['total']
+    
+    # Check each category budget
+    for budget in category_budgets:
+        spent = category_expenses.get(budget.category.id, 0)
+        percentage = (spent / budget.amount * 100) if budget.amount > 0 else 0
+        status = get_budget_status(spent, budget.amount)
+        
+        if status in ['warning', 'exceeded']:
+            budget_warnings.append({
+                'type': 'category',
+                'category': budget.category.name,
+                'amount': budget.amount,
+                'spent': spent,
+                'percentage': percentage,
+                'status': status
+            })
+    
     return render(request, 'accounts/transactions.html', {
         'transactions': transactions,
         'categories': categories,
@@ -284,6 +423,7 @@ def transactions(request):
         'category_filter': category_filter,
         'start_date': start_date,
         'end_date': end_date,
+        'budget_warnings': budget_warnings
     })
     
 # Create Transaction View
@@ -347,21 +487,92 @@ def delete_transaction(request, transaction_id):
 
 
 
-# Budget Page
+# Budget Views
 @login_required
 def set_budget(request):
+    # Get the user's existing budgets
+    existing_budgets = Budget.objects.filter(user=request.user).order_by('-month')
+    
     if request.method == 'POST':
-        form = BudgetForm(request.POST)
+        form = BudgetForm(request.POST, user=request.user)
         if form.is_valid():
             budget = form.save(commit=False)
             budget.user = request.user
-            budget.save()
-            return redirect('transactions')
+            
+            # Check if a budget already exists for this month and category
+            month_date = form.cleaned_data['month_year']  # Now using month_year from the form
+            category = form.cleaned_data['category']
+            
+            # Try to find an existing budget for the same month and category
+            try:
+                existing_budget = Budget.objects.get(
+                    user=request.user,
+                    month__year=month_date.year,
+                    month__month=month_date.month,
+                    category=category
+                )
+                # Update the existing budget
+                existing_budget.amount = form.cleaned_data['amount']
+                existing_budget.save()
+                messages.success(request, "Budget updated successfully!")
+            except Budget.DoesNotExist:
+                # Create a new budget
+                budget.save()
+                messages.success(request, "Budget created successfully!")
+                
+            return redirect('set_budget')
     else:
-        form = BudgetForm()
+        form = BudgetForm(user=request.user)
 
-    return render(request, 'accounts/set_budget.html', {'form': form})
+    return render(request, 'accounts/set_budget.html', {
+        'form': form,
+        'existing_budgets': existing_budgets
+    })
 
+@login_required
+def edit_budget(request, budget_id):
+    budget = get_object_or_404(Budget, id=budget_id, user=request.user)
+    
+    if request.method == 'POST':
+        form = BudgetForm(request.POST, instance=budget, user=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Budget updated successfully!")
+            return redirect('set_budget')
+    else:
+        form = BudgetForm(instance=budget, user=request.user)
+    
+    return render(request, 'accounts/edit_budget.html', {
+        'form': form,
+        'budget': budget
+    })
+
+@login_required
+def delete_budget(request, budget_id):
+    budget = get_object_or_404(Budget, id=budget_id, user=request.user)
+    
+    if request.method == 'POST':
+        budget.delete()
+        messages.success(request, "Budget deleted successfully!")
+        return redirect('set_budget')
+    
+    return render(request, 'accounts/delete_budget.html', {
+        'budget': budget
+    })
+    
+# Helper function to determine budget status
+def get_budget_status(spent, budget_amount):
+    if budget_amount <= 0:
+        return 'no-budget'
+    
+    percentage = (spent / budget_amount) * 100
+    
+    if percentage < 80:
+        return 'normal'
+    elif percentage < 100:
+        return 'warning'
+    else:
+        return 'exceeded'
 
 
 # Export Transactions to CSV

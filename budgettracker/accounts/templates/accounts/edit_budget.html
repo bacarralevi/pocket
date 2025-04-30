@@ -5,7 +5,7 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Set Monthly Budget</title>
+    <title>Edit Budget</title>
     <link rel="stylesheet" href="{% static 'accounts/css/create_transaction.css' %}">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="app-logo">
-                    <h1>Set Budget</h1>
+                    <h1>Edit Budget</h1>
                 </div>
 
                 <div class="header-actions">
@@ -39,20 +39,20 @@
             <div class="form-container">
                 <div class="form-card">
                     <div class="form-header">
-                        <h2>Set Monthly Budget</h2>
+                        <h2>Edit Budget</h2>
                     </div>
 
                     <form method="POST" class="transaction-form">
                         {% csrf_token %}
-                        <!-- Update the form section in set_budget.html -->
+
                         <div class="form-group">
-                            <label for="id_month_year">Budget Period</label>
-                            {{ form.month_year }}
-                            {% if form.month_year.help_text %}
-                            <small class="help-text">{{ form.month_year.help_text }}</small>
+                            <label for="id_month">Budget Period</label>
+                            {{ form.month }}
+                            {% if form.month.help_text %}
+                            <small class="help-text">{{ form.month.help_text }}</small>
                             {% endif %}
-                            {% if form.month_year.errors %}
-                            <div class="error-message">{{ form.month_year.errors }}</div>
+                            {% if form.month.errors %}
+                            <div class="error-message">{{ form.month.errors }}</div>
                             {% endif %}
                         </div>
 
@@ -82,53 +82,15 @@
                         </div>
 
                         <div class="form-actions">
-                            <a href="{% url 'dashboard' %}" class="cancel-button">
+                            <a href="{% url 'set_budget' %}" class="cancel-button">
                                 <i class="fas fa-times"></i> Cancel
                             </a>
                             <button type="submit" class="save-button">
-                                <i class="fas fa-save"></i> Save Budget
+                                <i class="fas fa-save"></i> Update Budget
                             </button>
                         </div>
                     </form>
                 </div>
-
-                <!-- Current Budgets Section -->
-                {% if existing_budgets %}
-                <div class="form-card" style="margin-top: 20px;">
-                    <div class="form-header">
-                        <h2>Current Budgets</h2>
-                    </div>
-                    <div style="padding: 20px;">
-                        <table style="width: 100%; border-collapse: collapse;">
-                            <thead>
-                                <tr>
-                                    <th style="text-align: left; padding: 10px; border-bottom: 1px solid #e2e8f0;">Period</th>
-                                    <th style="text-align: left; padding: 10px; border-bottom: 1px solid #e2e8f0;">Category</th>
-                                    <th style="text-align: right; padding: 10px; border-bottom: 1px solid #e2e8f0;">Amount</th>
-                                    <th style="text-align: center; padding: 10px; border-bottom: 1px solid #e2e8f0;">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for budget in existing_budgets %}
-                                <tr>
-                                    <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">{{ budget.month|date:"F Y" }}</td>
-                                    <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">{{ budget.category.name|default:"Overall Budget" }}</td>
-                                    <td style="text-align: right; padding: 10px; border-bottom: 1px solid #e2e8f0;">${{ budget.amount }}</td>
-                                    <td style="text-align: center; padding: 10px; border-bottom: 1px solid #e2e8f0;">
-                                        <a href="{% url 'edit_budget' budget.id %}" style="color: #4299e1; text-decoration: none; margin-right: 10px;">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </a>
-                                        <a href="{% url 'delete_budget' budget.id %}" style="color: #f56565; text-decoration: none;">
-                                            <i class="fas fa-trash"></i> Delete
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {% endif %}
             </div>
         </main>
 

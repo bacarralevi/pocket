@@ -1,0 +1,147 @@
+/* Budget form specific styling */
+.help-text {
+    color: #718096;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    display: block;
+}
+
+.error-message {
+    color: #e53e3e;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+/* Budget table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th {
+    text-align: left;
+    padding: 12px 15px;
+    background-color: #f1f5f9;
+    color: #475569;
+    font-weight: 600;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Budget progress bar styling */
+.budget-progress-container {
+    margin-top: 10px;
+    background-color: #edf2f7;
+    border-radius: 4px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.budget-progress-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.budget-normal {
+    background-color: #48bb78; /* Green */
+}
+
+.budget-warning {
+    background-color: #ed8936; /* Orange */
+}
+
+.budget-exceeded {
+    background-color: #f56565; /* Red */
+}
+
+.budget-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 0.85rem;
+    color: #718096;
+}
+
+/* Budget card styling */
+.budget-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.budget-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.budget-card-header h3 {
+    font-size: 1.1rem;
+    color: #2d3748;
+    margin: 0;
+}
+
+.budget-category-container {
+    margin-bottom: 20px;
+}
+
+.budget-category-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.budget-category-name {
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.budget-category-amount {
+    font-weight: 500;
+}
+
+.amount-normal {
+    color: #48bb78; /* Green */
+}
+
+.amount-warning {
+    color: #ed8936; /* Orange */
+}
+
+.amount-exceeded {
+    color: #f56565; /* Red */
+}
+
+.no-budget-message {
+    text-align: center;
+    padding: 20px;
+    color: #718096;
+}
+
+.budget-action {
+    display: inline-block;
+    background-color: #4299e1;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.budget-action:hover {
+    background-color: #3182ce;
+}
