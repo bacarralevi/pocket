@@ -55,6 +55,19 @@ body {
     letter-spacing: 1px;
 }
 
+.app-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* space between logo and title */
+}
+
+.logo-img {
+    height: 40px;
+    /* adjust based on your layout */
+    width: auto;
+}
+
 .header-actions {
     display: flex;
     align-items: center;
@@ -229,11 +242,11 @@ body {
     text-align: right;
 }
 
-.budget-action:visited{
+.budget-action:visited {
     color: inherit;
 }
 
-.budget-action:hover{
+.budget-action:hover {
     color: #718096;
 }
 
@@ -330,7 +343,8 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     padding: 16px;
     transition: transform 0.3s, box-shadow 0.3s;
-    border-left: 4px solid #48bb78; /* Default green border */
+    border-left: 4px solid #48bb78;
+    /* Default green border */
     display: flex;
     flex-direction: column;
 }
@@ -341,11 +355,13 @@ body {
 }
 
 .card-warning {
-    border-left-color: #ed8936; /* Orange for warning */
+    border-left-color: #ed8936;
+    /* Orange for warning */
 }
 
 .card-exceeded {
-    border-left-color: #f56565; /* Red for exceeded */
+    border-left-color: #f56565;
+    /* Red for exceeded */
 }
 
 .category-budget-header {
@@ -393,15 +409,18 @@ body {
 }
 
 .amount-normal {
-    color: #48bb78; /* Green */
+    color: #48bb78;
+    /* Green */
 }
 
 .amount-warning {
-    color: #ed8936; /* Orange */
+    color: #ed8936;
+    /* Orange */
 }
 
 .amount-exceeded {
-    color: #f56565; /* Red */
+    color: #f56565;
+    /* Red */
 }
 
 /* Action Cards */
@@ -483,6 +502,7 @@ body {
     color: white;
     border-color: #1e3a8a;
 }
+
 .section-graphs {
     background-color: white;
     border-radius: 10px;
@@ -714,7 +734,7 @@ body {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .budget-stats {
         padding-left: 0;
         border-left: none;
@@ -722,35 +742,36 @@ body {
         padding-top: 20px;
         width: 100%;
     }
-    
+
     .chart-container {
         margin-bottom: 20px;
     }
 }
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .header-content {
         padding: 0 15px;
     }
-    
+
     .app-logo h1 {
         font-size: 1.5rem;
     }
-    
+
     .logout-button span {
         display: none;
     }
-    
+
     .dashboard-content {
         padding: 20px 15px;
     }
-    
-    .financial-cards, 
+
+    .financial-cards,
     .action-cards {
         grid-template-columns: 1fr;
     }
-    
-    .financial-card, 
+
+    .financial-card,
     .action-card {
         padding: 20px;
     }
@@ -758,16 +779,16 @@ body {
     .category-budget-cards {
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     }
-    
+
     .budget-card-header {
         flex-direction: column;
     }
-    
+
     .budget-amount {
         margin-top: 10px;
         text-align: left;
     }
-    
+
     .amount {
         font-size: 1.5rem;
     }
@@ -775,16 +796,17 @@ body {
     .graph-container {
         height: 300px;
     }
+
     .section-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
     }
-    
+
     .view-toggle {
         width: 100%;
     }
-    
+
     .toggle-btn {
         flex: 1;
         text-align: center;
@@ -795,12 +817,12 @@ body {
         align-items: stretch;
         gap: 10px;
     }
-    
+
     .date-select {
         width: 100%;
         min-width: unset;
     }
-    
+
     .update-btn {
         width: 100%;
     }
@@ -812,13 +834,13 @@ body {
     .user-info span {
         display: none;
     }
-    
+
     .section-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 5px;
     }
-    
+
     .card-icon {
         width: 50px;
         height: 50px;
@@ -832,7 +854,7 @@ body {
     .category-budget-cards {
         grid-template-columns: 1fr;
     }
-    
+
     .overall-budget-card {
         padding: 16px;
     }

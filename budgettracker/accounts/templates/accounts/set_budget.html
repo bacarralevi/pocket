@@ -5,7 +5,7 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Set Monthly Budget</title>
+    <title>Pocket</title>
     <link rel="stylesheet" href="{% static 'accounts/css/create_transaction.css' %}">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,7 +22,8 @@
                 </div>
 
                 <div class="app-logo">
-                    <h1>Set Budget</h1>
+                    <img src="{% static 'accounts/images/logo.png' %}" alt="Pocket Logo" class="logo-img">
+                    <h1>Pocket</h1>
                 </div>
 
                 <div class="header-actions">
@@ -39,7 +40,7 @@
             <div class="form-container">
                 <div class="form-card">
                     <div class="form-header">
-                        <h2>Set Monthly Budget</h2>
+                        <h2>Set Budget</h2>
                     </div>
 
                     <form method="POST" class="transaction-form">
@@ -91,7 +92,6 @@
                         </div>
                     </form>
                 </div>
-
                 <!-- Current Budgets Section -->
                 {% if existing_budgets %}
                 <div class="form-card" style="margin-top: 20px;">
@@ -102,10 +102,14 @@
                         <table style="width: 100%; border-collapse: collapse;">
                             <thead>
                                 <tr>
-                                    <th style="text-align: left; padding: 10px; border-bottom: 1px solid #e2e8f0;">Period</th>
-                                    <th style="text-align: left; padding: 10px; border-bottom: 1px solid #e2e8f0;">Category</th>
-                                    <th style="text-align: right; padding: 10px; border-bottom: 1px solid #e2e8f0;">Amount</th>
-                                    <th style="text-align: center; padding: 10px; border-bottom: 1px solid #e2e8f0;">Actions</th>
+                                    <th style="text-align: left; padding: 10px; border-bottom: 1px solid #e2e8f0;">
+                                        Period</th>
+                                    <th style="text-align: left; padding: 10px; border-bottom: 1px solid #e2e8f0;">
+                                        Category</th>
+                                    <th style="text-align: right; padding: 10px; border-bottom: 1px solid #e2e8f0;">
+                                        Amount</th>
+                                    <th style="text-align: center; padding: 10px; border-bottom: 1px solid #e2e8f0;">
+                                        Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -115,10 +119,12 @@
                                     <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">{{ budget.category.name|default:"Overall Budget" }}</td>
                                     <td style="text-align: right; padding: 10px; border-bottom: 1px solid #e2e8f0;">${{ budget.amount }}</td>
                                     <td style="text-align: center; padding: 10px; border-bottom: 1px solid #e2e8f0;">
-                                        <a href="{% url 'edit_budget' budget.id %}" style="color: #4299e1; text-decoration: none; margin-right: 10px;">
+                                        <a href="{% url 'edit_budget' budget.id %}"
+                                            style="color: #4299e1; text-decoration: none; margin-right: 10px;">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
-                                        <a href="{% url 'delete_budget' budget.id %}" style="color: #f56565; text-decoration: none;">
+                                        <a href="{% url 'delete_budget' budget.id %}"
+                                            style="color: #f56565; text-decoration: none;">
                                             <i class="fas fa-trash"></i> Delete
                                         </a>
                                     </td>

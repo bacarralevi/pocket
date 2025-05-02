@@ -46,6 +46,19 @@ tr:hover {
     overflow: hidden;
 }
 
+.app-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* space between logo and title */
+}
+
+.logo-img {
+    height: 40px;
+    /* adjust based on your layout */
+    width: auto;
+}
+
 .budget-progress-bar {
     height: 100%;
     border-radius: 4px;
@@ -53,15 +66,18 @@ tr:hover {
 }
 
 .budget-normal {
-    background-color: #48bb78; /* Green */
+    background-color: #48bb78;
+    /* Green */
 }
 
 .budget-warning {
-    background-color: #ed8936; /* Orange */
+    background-color: #ed8936;
+    /* Orange */
 }
 
 .budget-exceeded {
-    background-color: #f56565; /* Red */
+    background-color: #f56565;
+    /* Red */
 }
 
 .budget-info {
@@ -114,15 +130,18 @@ tr:hover {
 }
 
 .amount-normal {
-    color: #48bb78; /* Green */
+    color: #48bb78;
+    /* Green */
 }
 
 .amount-warning {
-    color: #ed8936; /* Orange */
+    color: #ed8936;
+    /* Orange */
 }
 
 .amount-exceeded {
-    color: #f56565; /* Red */
+    color: #f56565;
+    /* Red */
 }
 
 .no-budget-message {

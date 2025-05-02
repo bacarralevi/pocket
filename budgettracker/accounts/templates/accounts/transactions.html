@@ -22,7 +22,8 @@
                 </div>
 
                 <div class="app-logo">
-                    <h1>Pockets</h1>
+                    <img src="{% static 'accounts/images/logo.png' %}" alt="Pocket Logo" class="logo-img">
+                    <h1>Pocket</h1>
                 </div>
 
                 <div class="header-actions">
@@ -183,10 +184,9 @@
 
                     <div class="transactions-actions">
                         <div class="actions-left">
-                            <a href="{% url 'dashboard' %}" class="back-link">
-                                <i class="fas fa-arrow-left"></i> Back to Dashboard
+                            <a href="{% url 'dashboard' %}" class="cancel-button">
+                                <i class="fas fa-times"></i> Cancel
                             </a>
-                            
                             {% if transactions %}
                             <a href="javascript:void(0);" onclick="exportTransactions()" class="export-button">
                                 <i class="fas fa-file-export"></i> Export CSV

@@ -30,6 +30,22 @@ body {
     z-index: 100;
 }
 
+.cancel-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #718096;
+    background-color: #eaeaea;
+    transition: background-color 0.3s;
+}
+
+.cancel-button:hover {
+    background-color: #e2e8f0;
+}
+
 .header-content {
     display: flex;
     justify-content: space-between;
@@ -37,6 +53,19 @@ body {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 20px;
+}
+
+.app-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* space between logo and title */
+}
+
+.logo-img {
+    height: 40px;
+    /* adjust based on your layout */
+    width: auto;
 }
 
 .user-info {
@@ -500,16 +529,16 @@ body {
     .search-inputs {
         flex-direction: column;
     }
-    
+
     .search-field {
         width: 100%;
     }
-    
+
     .search-actions {
         flex-direction: column;
         width: 100%;
     }
-    
+
     .search-button,
     .reset-button {
         width: 100%;
@@ -552,10 +581,11 @@ body {
         gap: 10px;
         width: 100%;
     }
-    
-    .back-link,
+
+    .cancel-button,
     .export-button {
         width: 100%;
+        justify-content: center;
     }
 }
 
@@ -568,11 +598,11 @@ body {
         flex-direction: column;
         gap: 15px;
     }
-    
+
     .actions-left {
         width: 100%;
     }
-    
+
     .add-button,
     .back-link,
     .export-button {

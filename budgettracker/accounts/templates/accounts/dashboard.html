@@ -11,14 +11,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <!-- Define global variables with Django template tags before loading the script -->
     <script>
         // Define URLs for API endpoints
         window.chartDataUrl = "{% url 'dashboard_chart_data' %}";
         window.categoryDataUrl = "{% url 'category_chart_data' %}";
     </script>
-    
+
     <!-- Custom JavaScript (load after defining global variables) -->
     <script src="{% static 'accounts/js/dashboard.js' %}"></script>
     <script src="{% static 'accounts/js/budget-charts.js' %}"></script>
@@ -35,6 +35,7 @@
                 </div>
 
                 <div class="app-logo">
+                    <img src="{% static 'accounts/images/logo.png' %}" alt="Pocket Logo" class="logo-img">
                     <h1>Pocket</h1>
                 </div>
 
@@ -53,7 +54,7 @@
             <section class="section-financial-overview">
                 <div class="section-header">
                     <h2>Financial Overview</h2>
-                    <span class="current-month">{{ current_month_name }}</span>
+                    <span class="current-month">Current Month: {{ current_month_name }}</span>
                 </div>
 
                 <div class="financial-cards">
@@ -131,114 +132,109 @@
                 </div>
             </section>
 
-            
+
             <section class="section-budget">
                 <div class="section-header">
                     <h2>Monthly Budget</h2>
-                    <a href="{% url 'set_budget' %}" class="budget-action">
-                        <i class="fas fa-plus"></i> Set Budget
-                    </a>
                 </div>
-            
+
                 {% if budget_status.has_budget %}
-                    {% if budget_status.overall.amount > 0 %}
-                        <!-- Overall Budget - Large Card -->
-                        <div class="overall-budget-card">
-                            <div class="budget-card-header">
-                                <div class="budget-card-title">
-                                    <h3>Overall Budget</h3>
-                                    <span class="budget-period">{{ current_month_name }} {{ current_year }}</span>
-                                </div>
-                                <div class="budget-amount {% if budget_status.overall.status == 'exceeded' %}amount-exceeded{% elif budget_status.overall.status == 'warning' %}amount-warning{% else %}amount-normal{% endif %}">
-                                    ${{ budget_status.overall.spent|floatformat:2 }} 
-                                    <span class="budget-limit">of ${{ budget_status.overall.amount|floatformat:2 }}</span>
-                                </div>
-                            </div>
-                            
-                            <div class="budget-visual-container">
-                                <div class="chart-container">
-                                    <canvas id="overallBudgetChart" 
-                                            data-spent="{{ budget_status.overall.spent }}" 
-                                            data-total="{{ budget_status.overall.amount }}" 
-                                            data-status="{{ budget_status.overall.status }}">
-                                    </canvas>
-                                </div>
-                                
-                                <div class="budget-stats">
-                                    <div class="budget-stat-item">
-                                        <span class="stat-label">Remaining</span>
-                                        <span class="stat-value {% if budget_status.overall.status == 'exceeded' %}amount-exceeded{% elif budget_status.overall.status == 'warning' %}amount-warning{% else %}amount-normal{% endif %}">
-                                            ${{ budget_status.overall.remaining|floatformat:2 }}
-                                        </span>
-                                    </div>
-                                    <div class="budget-stat-item">
-                                        <span class="stat-label">Used</span>
-                                        <span class="stat-value {% if budget_status.overall.status == 'exceeded' %}amount-exceeded{% elif budget_status.overall.status == 'warning' %}amount-warning{% else %}amount-normal{% endif %}">
-                                            {{ budget_status.overall.percentage|floatformat:0 }}%
-                                        </span>
-                                    </div>
-                                    <div class="budget-stat-item">
-                                        <span class="stat-label">Status</span>
-                                        <span class="status-badge {% if budget_status.overall.status == 'exceeded' %}status-exceeded{% elif budget_status.overall.status == 'warning' %}status-warning{% else %}status-normal{% endif %}">
-                                            {% if budget_status.overall.status == 'exceeded' %}
-                                                Exceeded
-                                            {% elif budget_status.overall.status == 'warning' %}
-                                                Warning
-                                            {% else %}
-                                                On Track
-                                            {% endif %}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                {% if budget_status.overall.amount > 0 %}
+                <!-- Overall Budget - Large Card -->
+                <div class="overall-budget-card">
+                    <div class="budget-card-header">
+                        <div class="budget-card-title">
+                            <h3>Overall Budget</h3>
+                            <span class="budget-period">{{ current_month_name }} {{ current_year }}</span>
                         </div>
-                    {% endif %}
-            
-                    {% if budget_status.categories %}
-                        <!-- Category Budgets - Mini Cards -->
-                        <h3 class="category-budgets-heading">Category Budgets</h3>
-                        <div class="category-budget-cards">
-                            {% for category in budget_status.categories %}
-                                <div class="category-budget-card {% if category.status == 'exceeded' %}card-exceeded{% elif category.status == 'warning' %}card-warning{% else %}card-normal{% endif %}">
-                                    <div class="category-budget-header">
-                                        <span class="category-name">{{ category.name }}</span>
-                                        <span class="category-percentage {% if category.status == 'exceeded' %}amount-exceeded{% elif category.status == 'warning' %}amount-warning{% else %}amount-normal{% endif %}">
-                                            {{ category.percentage|floatformat:0 }}%
-                                        </span>
-                                    </div>
-                                    
-                                    <div class="budget-mini-chart">
-                                        <canvas id="categoryChart-{{ forloop.counter }}" 
-                                                class="category-budget-chart"
-                                                data-spent="{{ category.spent }}" 
-                                                data-total="{{ category.amount }}" 
-                                                data-status="{{ category.status }}">
-                                        </canvas>
-                                    </div>
-                                    
-                                    <div class="category-budget-footer">
-                                        <div class="category-spent">${{ category.spent|floatformat:2 }}</div>
-                                        <div class="category-total">of ${{ category.amount|floatformat:2 }}</div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                {% else %}
-                    <div class="budget-card">
-                        <div class="no-budget-message">
-                            <p>You haven't set any budgets for this month yet.</p>
-                            <p style="margin-top: 10px;">
-                                <a href="{% url 'set_budget' %}" class="budget-action">
-                                    <i class="fas fa-plus"></i> Set Budget Now
-                                </a>
-                            </p>
+                        <div
+                            class="budget-amount {% if budget_status.overall.status == 'exceeded' %}amount-exceeded{% elif budget_status.overall.status == 'warning' %}amount-warning{% else %}amount-normal{% endif %}">
+                            ${{ budget_status.overall.spent|floatformat:2 }}
+                            <span class="budget-limit">of ${{ budget_status.overall.amount|floatformat:2 }}</span>
                         </div>
                     </div>
+
+                    <div class="budget-visual-container">
+                        <div class="chart-container">
+                            <canvas id="overallBudgetChart" data-spent="{{ budget_status.overall.spent }}"
+                                data-total="{{ budget_status.overall.amount }}"
+                                data-status="{{ budget_status.overall.status }}">
+                            </canvas>
+                        </div>
+
+                        <div class="budget-stats">
+                            <div class="budget-stat-item">
+                                <span class="stat-label">Remaining</span>
+                                <span
+                                    class="stat-value {% if budget_status.overall.status == 'exceeded' %}amount-exceeded{% elif budget_status.overall.status == 'warning' %}amount-warning{% else %}amount-normal{% endif %}">
+                                    ${{ budget_status.overall.remaining|floatformat:2 }}
+                                </span>
+                            </div>
+                            <div class="budget-stat-item">
+                                <span class="stat-label">Used</span>
+                                <span
+                                    class="stat-value {% if budget_status.overall.status == 'exceeded' %}amount-exceeded{% elif budget_status.overall.status == 'warning' %}amount-warning{% else %}amount-normal{% endif %}">
+                                    {{ budget_status.overall.percentage|floatformat:0 }}%
+                                </span>
+                            </div>
+                            <div class="budget-stat-item">
+                                <span class="stat-label">Status</span>
+                                <span
+                                    class="status-badge {% if budget_status.overall.status == 'exceeded' %}status-exceeded{% elif budget_status.overall.status == 'warning' %}status-warning{% else %}status-normal{% endif %}">
+                                    {% if budget_status.overall.status == 'exceeded' %}
+                                    Exceeded
+                                    {% elif budget_status.overall.status == 'warning' %}
+                                    Warning
+                                    {% else %}
+                                    On Track
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if budget_status.categories %}
+                <!-- Category Budgets - Mini Cards -->
+                <h3 class="category-budgets-heading">Category Budgets</h3>
+                <div class="category-budget-cards">
+                    {% for category in budget_status.categories %}
+                    <div
+                        class="category-budget-card {% if category.status == 'exceeded' %}card-exceeded{% elif category.status == 'warning' %}card-warning{% else %}card-normal{% endif %}">
+                        <div class="category-budget-header">
+                            <span class="category-name">{{ category.name }}</span>
+                            <span
+                                class="category-percentage {% if category.status == 'exceeded' %}amount-exceeded{% elif category.status == 'warning' %}amount-warning{% else %}amount-normal{% endif %}">
+                                {{ category.percentage|floatformat:0 }}%
+                            </span>
+                        </div>
+
+                        <div class="budget-mini-chart">
+                            <canvas id="categoryChart-{{ forloop.counter }}" class="category-budget-chart"
+                                data-spent="{{ category.spent }}" data-total="{{ category.amount }}"
+                                data-status="{{ category.status }}">
+                            </canvas>
+                        </div>
+
+                        <div class="category-budget-footer">
+                            <div class="category-spent">${{ category.spent|floatformat:2 }}</div>
+                            <div class="category-total">of ${{ category.amount|floatformat:2 }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="budget-card">
+                    <div class="no-budget-message">
+                        <p>You haven't set any budget for this month yet.</p>
+                    </div>
+                </div>
                 {% endif %}
             </section>
 
-            
+
             <!-- Chart Section -->
             <div class="charts-container">
                 <!-- Bar Chart Section -->
