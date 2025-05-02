@@ -5,14 +5,25 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | Your App Name</title>
+    <title>Register | Pocket</title>
     <link rel="stylesheet" href="{% static 'accounts/css/register.css' %}">
 </head>
 
 <body>
+    <!-- Header with logo -->
+    <header class="header">
+        <div class="logo-container">
+            <img src="{% static 'accounts/images/logo.png' %}" alt="Pocket Logo" class="logo">
+            <span class="logo-text">Pocket</span>
+        </div>
+    </header>
+
     <div class="container">
         <div class="register-card">
             <div class="register-header">
+                <div class="pocket-icon">
+                    <img src="{% static 'accounts/images/logo.png' %}" alt="Pocket Logo">
+                </div>
                 <h1>Create Account</h1>
                 <p class="subtitle">Please fill in your details to register</p>
             </div>
