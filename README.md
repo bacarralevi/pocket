@@ -1,6 +1,6 @@
 # 💰 Budget Tracker
 
-Budget Tracker is a Django-based web app built using Python, HTML, CSS, and JavaScript. 
+Pocket is a Django-based web app built using Python, HTML, CSS, and JavaScript. 
 It allows users to log in, set budgets, record transactions, and view them with filter and sort options. 
 The UI is clean and fully responsive across devices, including mobile. 
 We used only basic web technologies (no advanced frameworks), 
@@ -43,7 +43,7 @@ Or to make it accessible on your local network:
   python manage.py runserver 0.0.0.0:8000
 
 -------------------------------------------------
-🍏 For macOS/Linux Users:
+###🍏 For macOS/Linux Users:
 Install venv:
 
 1. Usually included with Python 3. If not, install it via:
